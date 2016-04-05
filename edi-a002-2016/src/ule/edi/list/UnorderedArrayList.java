@@ -1,6 +1,5 @@
 package ule.edi.list;
 
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
@@ -12,7 +11,7 @@ public class UnorderedArrayList<T> implements UnorderedListADT<T> {
 
 	private int nElements;
 
-	private final String CLASS_NAME = "UnorderedArrayList<T>";
+	private final static String CLASS_NAME = "UnorderedArrayList<T>";
 
 	protected int INVALID_INDEX = -1;
 
@@ -29,7 +28,6 @@ public class UnorderedArrayList<T> implements UnorderedListADT<T> {
 	public UnorderedArrayList(T ... v) {
 		this.storage = (T[]) new Object [INITIAL_CAPACITY];
 		this.nElements = 0;		
-
 		for (T x : v) {
 			addToRear(x);
 		}
@@ -47,8 +45,8 @@ public class UnorderedArrayList<T> implements UnorderedListADT<T> {
 				this.storage[i+1]=this.storage[i];
 			}
 			this.storage[0]=element;
-			this.nElements++;
 		}
+		this.nElements++;
 
 	}
 	private void expandCapacity() {
@@ -63,8 +61,8 @@ public class UnorderedArrayList<T> implements UnorderedListADT<T> {
 	@Override
 	public void addToRear(T element) {
 		if(nElements >= this.storage.length)expandCapacity();
+		this.storage[nElements] = element;
 		nElements++;
-		this.storage[nElements] = element;	
 	}
 
 
@@ -75,15 +73,15 @@ public class UnorderedArrayList<T> implements UnorderedListADT<T> {
 		else{
 			aux = this.storage[0];
 			this.storage[0]=null;
+			moveUp(0); //Desde el principio
 			nElements--;
-			moveUp(1); //Desde el principio
 			return aux;
 		}
 	}
 	/**
 	 * @param a indice que se ha quedado en null y que se tiene que rellenar
 	 */
-	private void moveUp(int a) {
+	public void moveUp(int a) {
 		for (int i = a; i < nElements; i++) {
 			try{
 				if(this.storage[i+1]!=null) this.storage[i] = this.storage[i+1];
@@ -92,15 +90,6 @@ public class UnorderedArrayList<T> implements UnorderedListADT<T> {
 			}
 		}
 	}
-	/*
-	 * nElements = 5;
-	 [0] = laefh
-	 [1] = lskdnf
-	 [2] = akhfd
-	 [3] = ehf
-	 [4] = ehf
-	 */
-
 	@Override
 	public T removeLast() throws EmptyCollectionException {
 		T aux;
@@ -113,15 +102,17 @@ public class UnorderedArrayList<T> implements UnorderedListADT<T> {
 		}
 	}
 	@Override
-	public T remove(T element) throws EmptyCollectionException {
+	public T remove(T element) throws EmptyCollectionException,NoSuchElementException {
 
 		T aux;
+		int index;
 		listaVacia();
 		if(!this.contains(element)) throw new NoSuchElementException();
-
-		aux = this.storage[getIndex(element)];
-		this.storage[getIndex(element)]=null;
-		moveUp(getIndex(element));
+		index = getIndex(element);
+		aux = this.storage[index];
+		this.storage[index]=null;
+		moveUp(index);
+		nElements--;
 		return aux;
 	}
 	/**
@@ -129,8 +120,8 @@ public class UnorderedArrayList<T> implements UnorderedListADT<T> {
 	 * @return the index of the element,
 	 * if the element is not in the list return -1
 	 */
-	private int getIndex(T element) {
-		for (int i = 0; i < storage.length; i++) {
+	public int getIndex(T element) {
+		for (int i = 0; i < nElements; i++) {
 			if(this.storage[i].equals(element)) return i;
 		}
 		return INVALID_INDEX;
@@ -193,11 +184,13 @@ public class UnorderedArrayList<T> implements UnorderedListADT<T> {
 		indexCorrecto(i);
 		T aux;
 		aux = this.storage[i-1];
-		moveUp(i);
+		this.storage[i-1]=null;
+		moveUp(i-1);
+		nElements--;
 		return aux;
 	}
 
-	private void indexCorrecto(int i) throws IndexOutOfBoundsException {
+	public void indexCorrecto(int i) throws IndexOutOfBoundsException {
 		if(i > nElements || i<1) throw new IndexOutOfBoundsException(Integer.toString(i));
 	}
 
@@ -219,11 +212,11 @@ public class UnorderedArrayList<T> implements UnorderedListADT<T> {
 	 * @author profesor
 	 */
 	private class DefaultIteratorImpl implements Iterator<T> {
-		int lastPosition;
+		int nextPosition;
 		@Override
 		public boolean hasNext() {
 			try{
-				return storage[lastPosition+1]!=null;
+				return storage[nextPosition]!=null;
 			}catch(IndexOutOfBoundsException e){
 				return false;
 			}
@@ -231,27 +224,26 @@ public class UnorderedArrayList<T> implements UnorderedListADT<T> {
 
 		@Override
 		public T next() {
-			return  storage[lastPosition++];
+			if(!hasNext())throw new java.util.NoSuchElementException();
+			return  storage[nextPosition++];
 		}
 
 		@Override
 		public void remove() {
-			//	Según el contrato de {@link java.util.Iterator}
-			if(!hasNext())throw new UnsupportedOperationException();
-			removeElementAt(lastPosition-1);
+			throw new UnsupportedOperationException();
 		}
 		private DefaultIteratorImpl(){
-			this.lastPosition=0;
+			this.nextPosition=0;
 		}
 	};
 
 	private class SkippingIteratorImpl implements Iterator<T> {
-		private int lastPosition;
+		private int nextPosition;
 
 		@Override
 		public boolean hasNext() {
 			try{
-				return storage[lastPosition+2]!=null;
+				return storage[nextPosition]!=null;
 			}catch(IndexOutOfBoundsException e){
 				return false;
 			}
@@ -259,18 +251,18 @@ public class UnorderedArrayList<T> implements UnorderedListADT<T> {
 
 		@Override
 		public T next() {
-			T aux =  storage[lastPosition];
-			lastPosition = lastPosition+2;
+			if(!hasNext())throw new java.util.NoSuchElementException();
+			T aux =  storage[nextPosition];
+			nextPosition = nextPosition+2;
 			return aux;
 		}
 
 		@Override
 		public void remove() {
-			if(!hasNext())throw new UnsupportedOperationException();
-			removeElementAt(lastPosition-2);
+			throw new UnsupportedOperationException();
 		}
 		private SkippingIteratorImpl(){
-			this.lastPosition=0;
+			this.nextPosition=0;
 		}
 	};
 
@@ -279,21 +271,19 @@ public class UnorderedArrayList<T> implements UnorderedListADT<T> {
 		return new SkippingIteratorImpl();
 	}
 
-	@SuppressWarnings("unused")
 	private class RangedIteratorImpl implements Iterator<T> {
 		int from,to,step,current;
 
 		private RangedIteratorImpl(int from, int to, int step) {
-			this.current =0;
-			this.to = to;
+			this.to = to-1;
 			this.step = step;
-			this.from = from;
+			this.from = from-1;
+			this.current = this.from;
 		}
-
 		@Override
 		public boolean hasNext() {
 			try{
-				return storage[current+step] != null&&current+step<=to;
+				return storage[current] != null && current <= to;
 			}catch(IndexOutOfBoundsException e){
 				return false;
 			}
@@ -301,6 +291,7 @@ public class UnorderedArrayList<T> implements UnorderedListADT<T> {
 
 		@Override
 		public T next() {
+			if(!hasNext())throw new java.util.NoSuchElementException();
 			T aux = storage[current];
 			current  = current+step;
 			return aux;
@@ -308,8 +299,7 @@ public class UnorderedArrayList<T> implements UnorderedListADT<T> {
 
 		@Override
 		public void remove() {
-			if(!hasNext())throw new UnsupportedOperationException();
-			removeElementAt(current-step);		
+			throw new UnsupportedOperationException();
 		}		
 	};
 
@@ -330,7 +320,7 @@ public class UnorderedArrayList<T> implements UnorderedListADT<T> {
 	 * @return una lista con los elementos que va entregando el iterador.
 	 */
 	public static <E> UnorderedListADT<E> listWith(Iterator<E> contents) {
-		UnorderedArrayList<E> list = new UnorderedArrayList<E>();
+		UnorderedArrayList<E> list = new UnorderedArrayList<>();
 		for (Iterator<E> iterator = contents ; iterator.hasNext();) 
 			list.addToRear(iterator.next());
 		return list;
@@ -351,16 +341,19 @@ public class UnorderedArrayList<T> implements UnorderedListADT<T> {
 	 * @return una lista con los elementos de T1 sin duplicados
 	 */
 	public static <E> UnorderedListADT<E> distinct(UnorderedListADT<E> T1) {
-		UnorderedArrayList<E> list = new UnorderedArrayList<E>();
-		/*
-		UnorderedArrayList<E> original = T1;
-		for (E valor : T1) {
-			for (E valor2 : T1) {
-				if
+		UnorderedListADT<E> aux = new UnorderedArrayList<E>();
+		E aux_element;
+		boolean is;
+		for (int i = 0; i < T1.size(); i++) {
+			aux_element = T1.getElementAt(i+1);
+			is = false;
+			for (int j = 0; j < aux.size(); j++) {
+				if(aux_element.equals(aux.getElementAt(j+1))) is=true;
 			}
+			if(!is) aux.addToRear(aux_element);
 		}
-		*/
-		return list;
+		
+		return aux;
 	}
 
 	/**
@@ -378,7 +371,11 @@ public class UnorderedArrayList<T> implements UnorderedListADT<T> {
 	 * @return otra lista con los mismos elementos en orden inverso.
 	 */
 	public static <E> UnorderedListADT<E> reverse(UnorderedListADT<E> T1) {
-		return null;
+		UnorderedListADT<E> list = new UnorderedArrayList<>();
+		int i;
+		for(i=0; i<T1.size();i++)
+			list.addToFront(T1.getElementAt(i+1));
+		return list;
 	}
 
 

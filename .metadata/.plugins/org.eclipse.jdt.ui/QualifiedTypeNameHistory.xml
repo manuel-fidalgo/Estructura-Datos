@@ -2,5 +2,16 @@
 <qualifiedTypeNameHistroy>
 <fullyQualifiedTypeName name="ule.edi.EmptyCollectionException"/>
 <fullyQualifiedTypeName name="java.lang.NegativeArraySizeException"/>
+<fullyQualifiedTypeName name="ule.edi.list.UnorderedArrayList.SkippingIteratorImpl"/>
+<fullyQualifiedTypeName name="ule.edi.list.UnorderedArrayList.DefaultIteratorImpl"/>
+<fullyQualifiedTypeName name="ule.edi.list.UnorderedArrayList.RangedIteratorImpl"/>
+<fullyQualifiedTypeName name="java.util.ArrayList"/>
+<fullyQualifiedTypeName name="org.junit.Test"/>
+<fullyQualifiedTypeName name="java.security.GeneralSecurityException"/>
+<fullyQualifiedTypeName name="java.util.NoSuchElementException"/>
+<fullyQualifiedTypeName name="ule.edi.list.UnorderedArrayList"/>
 <fullyQualifiedTypeName name="java.lang.IndexOutOfBoundsException"/>
+<fullyQualifiedTypeName name="org.junit.Assert"/>
+<fullyQualifiedTypeName name="javax.swing.plaf.basic.BasicInternalFrameTitlePane.MoveAction"/>
+<fullyQualifiedTypeName name="java.lang.UnsupportedOperationException"/>
 </qualifiedTypeNameHistroy>
