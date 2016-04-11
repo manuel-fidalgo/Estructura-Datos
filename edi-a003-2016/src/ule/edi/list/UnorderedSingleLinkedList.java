@@ -142,7 +142,7 @@ public class UnorderedSingleLinkedList<T> implements UnorderedListADT<T> {
 	@Override
 	public boolean contains(T target) {
 		if (isEmpty()) return false;
-		
+
 		Node<T> current = first;
 		while(current.next!=null){
 			if(current.element.equals(target)) return true;
@@ -154,7 +154,7 @@ public class UnorderedSingleLinkedList<T> implements UnorderedListADT<T> {
 	@Override
 	public boolean isEmpty() {
 		if(first==null)
-		return true;
+			return true;
 		else
 			return false;
 	}
@@ -176,23 +176,59 @@ public class UnorderedSingleLinkedList<T> implements UnorderedListADT<T> {
 		if(i<1||i>size()) throw new IndexOutOfBoundsException();
 		int currentpos=1;
 		Node<T> current = first;
-		while(current.next!=null){
+		while(current != null){
+			if(currentpos==i) return current.element;
 			current = current.next;
 			currentpos++;
-			if(currentpos==i) return current.element;
+		}
+		return null;
+	}
+	/*Devuelve el nodo como que esta en la posicion que se le pasa como parametro*/
+	private Node<T> getNodeAt(int i) throws IndexOutOfBoundsException {
+		if(i<1||i>size()) throw new IndexOutOfBoundsException();
+		int currentpos=1;
+		Node<T> current = first;
+		while(current != null){
+			if(currentpos==i) return current;
+			current = current.next;
+			currentpos++;
 		}
 		return null;
 	}
 
 	@Override
 	public T removeElementAt(int i) throws IndexOutOfBoundsException {
-		// TODO Auto-generated method stub
+		if(i<1||i>size()) throw new IndexOutOfBoundsException();
+		int currentpos=1;
+		Node<T> current = first;
+		//Cuidado que el elemento a remover sea el ultimo
+		while(current != null){
+			if(currentpos==i){
+				//current pos elemento a devolver y eliminar;
+				Node<T> aux = current;
+				getNodeAt(i-1).next = current.next;
+				return aux.element; //El colector de basura se encargara de recoger el elementos sin referencia
+			}
+			current = current.next;
+			currentpos++;
+		}
 		return null;
 	}
 
 	@Override
 	public T replaceElementAt(int n, T element) {
-		// TODO Auto-generated method stub
+		if(n<1||n>size()) throw new IndexOutOfBoundsException();
+		int currentpos=1;
+		Node<T> current = first;
+		while(current != null){
+			if(currentpos==n){
+				T aux = current.element;
+				current.element = element;
+				return aux;
+			}
+			current = current.next;
+			currentpos++;
+		}
 		return null;
 	}
 
@@ -322,7 +358,8 @@ public class UnorderedSingleLinkedList<T> implements UnorderedListADT<T> {
 	 * @return otra lista con los mismos elementos en orden inverso.
 	 */
 	public static <E> UnorderedListADT<E> reverse(UnorderedListADT<E> T1) {
-		// TODO Auto-generated method stub
+		//Vamos a darle al vuelta a la lista,
+		//lksdvnaslbvasv
 		return null;
 	}
 
@@ -341,7 +378,7 @@ public class UnorderedSingleLinkedList<T> implements UnorderedListADT<T> {
 		// TODO Auto-generated method stub
 		return null;
 	}
-
+//////////////////////////////
 
 	@Override
 	public String toString() {
