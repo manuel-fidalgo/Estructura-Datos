@@ -378,7 +378,7 @@ public class UnorderedSingleLinkedList<T> implements UnorderedListADT<T> {
 		// TODO Auto-generated method stub
 		return null;
 	}
-//////////////////////////////
+
 
 	@Override
 	public String toString() {
