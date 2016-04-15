@@ -235,8 +235,7 @@ public class UnorderedSingleLinkedList<T> implements UnorderedListADT<T> {
 
 	@Override
 	public Iterator<T> iterator() {
-		// TODO Auto-generated method stub
-		return null;
+		return new DefaultIteratorImpl();
 	}
 
 	/**
@@ -250,64 +249,84 @@ public class UnorderedSingleLinkedList<T> implements UnorderedListADT<T> {
 	 * @author profesor
 	 */	
 	private class DefaultIteratorImpl implements Iterator<T> {
-
+		
+		Node<T> current;
 		@Override
 		public boolean hasNext() {
-			// TODO Auto-generated method stub
-			return false;
+			if(current==null)
+				return false;
+			if (current.next != null)
+				return true;
+			else 
+				return false;
 		}
 
 		@Override
 		public T next() {
-			// TODO Auto-generated method stub
-			return null;
+			current = current.next;
+			return current.element;
 		}
 
 		@Override
 		public void remove() {
-			// Según el contrato de {@link java.util.Iterator}
 			throw new UnsupportedOperationException();
+		}
+		
+		public DefaultIteratorImpl(){
+			current = first;
 		}
 	}
 
 	private class SkippingIteratorImpl implements Iterator<T> {
 
+		Node<T> current = first;
 		@Override
 		public boolean hasNext() {
-			// TODO Auto-generated method stub
-			return false;
+			if(current==null)
+				return false;
+			if(current.next.next!=null)
+				return true;
+			else
+				return false;
 		}
 
 		@Override
 		public T next() {
-			// TODO Auto-generated method stub
-			return null;
+			for (int i = 0; i < 2; i++) 
+				current = current.next;
+			return current.element;
 		}
 
 		@Override
 		public void remove() {
-			//	Según el contrato de {@link java.util.Iterator} 
 			throw new UnsupportedOperationException();
 		}
 	};
 
 	@Override
 	public Iterator<T> skippingIterator() {
-		// TODO Auto-generated method stub
-		return null;
+		return new SkippingIteratorImpl();
 	}
 
 	private class RangedIteratorImpl implements Iterator<T> {
+		
+		private int from,to,step;
+		private Node<T> current;
+		
+		public RangedIteratorImpl(int from, int to, int step) {
+			this.from = from;
+			this.to = to;
+			this.step = step;
+			this.current = first;
+		}
 
 		@Override
 		public boolean hasNext() {
-			// TODO Auto-generated method stub
 			return false;
 		}
 
 		@Override
 		public T next() {
-			// TODO Auto-generated method stub
 			return null;
 		}
 
@@ -320,9 +339,9 @@ public class UnorderedSingleLinkedList<T> implements UnorderedListADT<T> {
 
 	@Override
 	public Iterator<T> rangedIterator(int from, int to, int step) {
-		// TODO Auto-generated method stub
-		return null;
+		return new RangedIteratorImpl(from,to,step);
 	}
+	
 
 	/**
 	 * Elimina duplicados y devuelve el resultado como otra lista.
@@ -339,7 +358,8 @@ public class UnorderedSingleLinkedList<T> implements UnorderedListADT<T> {
 	 * @return una lista con los elementos de T1 sin duplicados
 	 */
 	public static <E> UnorderedListADT<E> distinct(UnorderedListADT<E> T1) {
-		// TODO Auto-generated method stub		
+		UnorderedSingleLinkedList<E> aux = new UnorderedSingleLinkedList<E>();
+		
 		return null;
 	}
 
@@ -358,9 +378,13 @@ public class UnorderedSingleLinkedList<T> implements UnorderedListADT<T> {
 	 * @return otra lista con los mismos elementos en orden inverso.
 	 */
 	public static <E> UnorderedListADT<E> reverse(UnorderedListADT<E> T1) {
-		//Vamos a darle al vuelta a la lista,
-		//lksdvnaslbvasv
-		return null;
+		UnorderedSingleLinkedList<E> aux = new UnorderedSingleLinkedList<E>();
+		Iterator<E> t = T1.iterator();
+		while(t.hasNext()){
+			aux.addToFront(t.next());
+		}
+		
+		return aux;
 	}
 
 	/**
@@ -375,7 +399,10 @@ public class UnorderedSingleLinkedList<T> implements UnorderedListADT<T> {
 	 * @return una lista con los elementos que va entregando el iterador.
 	 */
 	public static <E> UnorderedListADT<E> listWith(Iterator<E> contents) {
-		// TODO Auto-generated method stub
+		UnorderedSingleLinkedList<E> aux = new UnorderedSingleLinkedList<E>();
+		while(contents.hasNext()){
+			aux.addToRear(contents.next());
+		}
 		return null;
 	}
 
