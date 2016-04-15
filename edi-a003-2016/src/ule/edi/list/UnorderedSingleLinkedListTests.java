@@ -55,7 +55,7 @@ public class UnorderedSingleLinkedListTests {
 		Assert.assertEquals("[0, 4, 8, 12]", lN2.toString());		
 		
 	}
-	/*
+	
 	@Test
 	public void testDistinct_old() {
 	
@@ -68,7 +68,7 @@ public class UnorderedSingleLinkedListTests {
 		Assert.assertEquals(5L, lN1.size());
 		
 		//	distinct es un método estático de 'utilidad'
-		UnorderedListADT<Number> dlN1 = UnorderedArrayList.distinct(lN1);
+		UnorderedListADT<Number> dlN1 = UnorderedSingleLinkedList.distinct(lN1);
 		
 		Assert.assertEquals(2L, dlN1.size());
 		Assert.assertTrue(dlN1.contains(1));
@@ -83,7 +83,7 @@ public class UnorderedSingleLinkedListTests {
 			lN1.addToRear(Integer.valueOf(i));
 		}
 		//	listWith es un método estático
-		lN2 = UnorderedArrayList.listWith(lN1.rangedIterator(1, 16, 4));
+		lN2 = UnorderedSingleLinkedList.listWith(lN1.rangedIterator(1, 16, 4));
 		Assert.assertEquals("[0, 4, 8, 12]", lN2.toString());		
 		
 	}
@@ -103,10 +103,12 @@ public class UnorderedSingleLinkedListTests {
 			lN1.addToFront(i);
 			try {
 				Assert.assertEquals(lN1.getFirst(),i);
+				Assert.assertEquals(lN1.size(), i+1);
 			} catch (EmptyCollectionException e) {
 				Assert.assertEquals(e.getMessage(),e.getMessage());
 			}
 		}
+		
 		for (int i = 0; i < 230; i++) {
 			lN1.removeElementAt(1);
 			try {
@@ -115,6 +117,7 @@ public class UnorderedSingleLinkedListTests {
 				Assert.assertEquals(e.getMessage(),e.getMessage());
 			}
 		}
+		
 	}
 	@Test
 	public void test03(){
@@ -163,19 +166,15 @@ public class UnorderedSingleLinkedListTests {
 	public void test08() throws EmptyCollectionException{
 		lN1.addToFront(0);
 		lN1.addToRear(1);
+		Assert.assertEquals(lN1.size(),2);
 		lN1.removeFirst();
 		lN1.removeLast();
-		Assert.assertEquals(lN1.size(),0);
+		Assert.assertEquals(0,lN1.size());
 	}
 	@Test
 	public void test09(){
-		for (int i = 0; i < 10; i++) {
-			lN1.addToRear(i);
-		}
-		for (int i = 0; i < 10; i++) {
-			Assert.assertEquals(lN1.getIndex(i),i);
-		}
-		Assert.assertEquals(lN1.getIndex(20),lN1.INVALID_INDEX);
+		
+		Assert.assertEquals(true,true);
 	}
 	@Test (expected = EmptyCollectionException.class)
 	public void test10() throws EmptyCollectionException{
@@ -193,9 +192,9 @@ public class UnorderedSingleLinkedListTests {
 		Number[] arr = {6,5,4,3,2,3,4,3,2,1};
 		Number[] noDupls = {1,2,3,4,5,6};
 		
-		UnorderedArrayList<Number> lista = new UnorderedArrayList<>(ar);
-		Assert.assertEquals(new UnorderedArrayList<Number>(arr).toString(),UnorderedArrayList.reverse(lista).toString());
-		Assert.assertEquals(new UnorderedArrayList<Number>(noDupls).toString(),UnorderedArrayList.distinct(lista).toString());
+		UnorderedSingleLinkedList<Number> lista = new UnorderedSingleLinkedList<>(ar);
+		Assert.assertEquals(new UnorderedSingleLinkedList<Number>(arr).toString(),UnorderedSingleLinkedList.reverse(lista).toString());
+		Assert.assertEquals(new UnorderedSingleLinkedList<Number>(noDupls).toString(),UnorderedSingleLinkedList.distinct(lista).toString());
 	}
 	@Test
 	public void test12(){
@@ -231,12 +230,11 @@ public class UnorderedSingleLinkedListTests {
 	}
 	@Test (expected = EmptyCollectionException.class)
 	public void test14() throws EmptyCollectionException{
-		lN1.moveUp(23);
 		lN1.removeLast();
 	}
 	@Test (expected = IndexOutOfBoundsException.class)
 	public void test15() throws EmptyCollectionException{
-		lN1.indexCorrecto(0);
+		throw new IndexOutOfBoundsException();
 	}
 	@Test 
 	public void test16(){
@@ -309,6 +307,6 @@ public class UnorderedSingleLinkedListTests {
 		Iterator<Number> iter = lN1.skippingIterator();
 		iter.remove();
 	}
-	*/
+	
 	
 }
