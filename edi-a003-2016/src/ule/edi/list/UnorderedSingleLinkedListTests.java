@@ -1,5 +1,7 @@
 package ule.edi.list;
 
+import static org.junit.Assert.*;
+
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
@@ -86,6 +88,32 @@ public class UnorderedSingleLinkedListTests {
 		lN2 = UnorderedSingleLinkedList.listWith(lN1.rangedIterator(1, 16, 4));
 		Assert.assertEquals("[0, 4, 8, 12]", lN2.toString());		
 		
+	}
+	@Test
+	public void test00(){
+		for (int i = 0; i < 10; i++) {
+			lN1.addToRear(i);
+			assertEquals(lN1.size(),i+1);
+		}
+		for (int i = 0; i < 10; i++) {
+			try {
+				lN1.remove(i);
+				assertEquals(lN1.size(),9-i);
+			} catch (EmptyCollectionException e) {
+				
+			}
+		}
+		for (int i = 0; i < 10; i++) {
+			lN1.addToFront(i);
+			assertEquals(lN1.size(),i+1);
+		}for (int i = 0; i < 10; i++) {
+			try {
+				lN1.remove(i);
+				assertEquals(lN1.size(),9-i);
+			} catch (EmptyCollectionException e) {
+				
+			}
+		}
 	}
 	
 	@Test
@@ -299,7 +327,7 @@ public class UnorderedSingleLinkedListTests {
 	}
 	@Test (expected = UnsupportedOperationException.class)
 	public void test22(){
-		Iterator<Number> iter = lN1.rangedIterator(0, 1, 2);
+		Iterator<Number> iter = lN1.rangedIterator(1, 4, 2);
 		iter.remove();
 	}
 	@Test (expected = UnsupportedOperationException.class)
