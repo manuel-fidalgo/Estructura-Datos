@@ -24,7 +24,7 @@ public class UnorderedSingleLinkedListTests {
 	
 	//	JUnit no executa los tests anotados con @Ignore
 	
-	@Ignore
+	@Test
 	public void testDistinct() {
 	
 		lN1.addToRear(1);
@@ -43,7 +43,7 @@ public class UnorderedSingleLinkedListTests {
 		Assert.assertTrue(dlN1.contains(2));
 	}
 	
-	@Ignore
+	@Test
 	public void testRangedIterator() {
 	
 		UnorderedListADT<Number> lN2;
@@ -85,6 +85,7 @@ public class UnorderedSingleLinkedListTests {
 			lN1.addToRear(Integer.valueOf(i));
 		}
 		//	listWith es un método estático
+		// 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18
 		lN2 = UnorderedSingleLinkedList.listWith(lN1.rangedIterator(1, 16, 4));
 		Assert.assertEquals("[0, 4, 8, 12]", lN2.toString());		
 		
@@ -320,6 +321,7 @@ public class UnorderedSingleLinkedListTests {
 			Assert.assertEquals(j+1,iter.next());
 		}
 	}
+	
 	@Test(expected = UnsupportedOperationException.class)
 	public void test21(){
 		Iterator<Number> iter = lN1.iterator();
@@ -334,6 +336,98 @@ public class UnorderedSingleLinkedListTests {
 	public void test23(){
 		Iterator<Number> iter = lN1.skippingIterator();
 		iter.remove();
+	}
+	
+	@Test (expected = NoSuchElementException.class)
+	public void test24(){
+		UnorderedSingleLinkedList<Number> LN2 = new UnorderedSingleLinkedList<Number>();
+		Iterator<Number> iter = LN2.skippingIterator();
+		iter.next();
+	}
+	@Test (expected = NoSuchElementException.class)
+	public void test25(){
+		UnorderedSingleLinkedList<Number> LN2 = new UnorderedSingleLinkedList<Number>();
+		Iterator<Number> iter = LN2.iterator();
+		iter.next();
+	}
+	@Test (expected = NoSuchElementException.class)
+	public void test26(){
+		UnorderedSingleLinkedList<Number> LN2 = new UnorderedSingleLinkedList<Number>();
+		Iterator<Number> iter = LN2.rangedIterator(1, 10, 5);
+		iter.next();
+	}
+	@Test (expected = IndexOutOfBoundsException.class)
+	public void test27(){
+	for (int i = 0; i < 20; i++) {
+		lN1.addToRear(i);
+		lN1.getNodeAt(i+1);
+	}
+	lN1.getNodeAt(-1);
+	}
+	@Test
+	public void test28(){
+		UnorderedSingleLinkedList<Number> lN2 = new UnorderedSingleLinkedList<Number>();
+		for (int i = 1; i <= 40; i++) {
+			lN1.addToRear(i);
+			lN2.addToRear(i);
+			assertEquals(lN1.getElementAt(i),i);
+			lN1.replaceElementAt(i, 0);
+			assertEquals(lN1.getElementAt(i),0);
+		}
+		assertEquals(lN1.size(),40);
+		assertEquals(lN1.toString(),"[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]");
+	}
+	@Test
+	public void test29() throws EmptyCollectionException{
+		for (int i = 0; i < 5; i++) {
+			lN1.addToRear(i);
+		}
+		assertEquals(lN1.getNodeAt(1).getNext().getTwoNext().toString(),"(3)");
+		assertEquals(lN1.getFirst().toString(),"0");
+		for (int i = 0; i < 5; i++) {
+			lN1.removeLast();
+		}
+		try{
+			lN1.removeLast();
+			fail();
+		}catch(EmptyCollectionException e){
+			assertTrue(true);
+		}
+	}
+	@Test
+	public void test30(){
+		for (int i = 1; i <= 15; i++) {
+			lN1.addToRear(i);
+		}
+		Iterator<Number> iter = lN1.skippingIterator();
+		assertEquals(UnorderedSingleLinkedList.listWith(iter).toString(),"[1, 3, 5, 7, 9, 11, 13, 15]");
+		Iterator<Number> iter_2 = lN1.rangedIterator(1, 15, 3);
+		assertEquals(UnorderedSingleLinkedList.listWith(iter_2).toString(),"[1, 4, 7, 10, 13]");
+	}
+	@Test
+	public void test31(){
+		for (int i = 1; i <= 15; i++) {
+			lN1.addToRear(i);
+		}
+		Iterator<Number> iter_2 = lN1.rangedIterator(1, 15, 25);
+		assertEquals(UnorderedSingleLinkedList.listWith(iter_2).toString(),"[1]");
+	}
+	@Test (expected = IndexOutOfBoundsException.class)
+	public void test32() throws EmptyCollectionException{
+		for (int i = 1; i <= 15; i++) {
+			lN1.addToRear(i);
+		}
+		lN1.getFirst();
+		lN1.getElementAt(-1);
+		assertTrue(true);
+	}
+	@Test
+	public void test33() throws EmptyCollectionException{
+		for (int i = 1; i <= 15; i++) {
+			lN1.addToRear(i);
+		}
+		Iterator<Number> iter = lN1.rangedIterator(4,10,3);
+		assertEquals(UnorderedSingleLinkedList.listWith(iter).toString(),"[4, 7, 10]");
 	}
 	
 	

@@ -36,7 +36,7 @@ public class UnorderedSingleLinkedList<T> implements UnorderedListADT<T> {
 		public Node<G> getNext(){
 			return this.next;
 		}
-		private Node<G> getTwoNext(){
+		public Node<G> getTwoNext(){
 			return this.next.next;
 		}
 
@@ -227,10 +227,10 @@ public class UnorderedSingleLinkedList<T> implements UnorderedListADT<T> {
 			current = current.next;
 			currentpos++;
 		}
-		return null;
+		throw new IndexOutOfBoundsException();
 	}
 	/*Devuelve el nodo como que esta en la posicion que se le pasa como parametro*/
-	private Node<T> getNodeAt(int i) throws IndexOutOfBoundsException {
+	public Node<T> getNodeAt(int i) throws IndexOutOfBoundsException {
 		if(i<1||i>size()) throw new IndexOutOfBoundsException();
 
 		int currentpos=1;
@@ -261,7 +261,7 @@ public class UnorderedSingleLinkedList<T> implements UnorderedListADT<T> {
 			current = current.next;
 			currentpos++;
 		}
-		return null;
+		throw new IndexOutOfBoundsException();
 	}
 
 	@Override
@@ -280,7 +280,7 @@ public class UnorderedSingleLinkedList<T> implements UnorderedListADT<T> {
 			current = current.next;
 			currentpos++;
 		}
-		return null;
+		throw new IndexOutOfBoundsException();
 	}
 
 
@@ -312,6 +312,7 @@ public class UnorderedSingleLinkedList<T> implements UnorderedListADT<T> {
 
 		@Override
 		public T next() {
+			if(siguiente==null) throw new NoSuchElementException();
 			Node<T> aux = siguiente;
 			siguiente = siguiente.next;
 			return aux.element;
@@ -340,9 +341,14 @@ public class UnorderedSingleLinkedList<T> implements UnorderedListADT<T> {
 
 		@Override
 		public T next() {
+			if(siguiente==null) throw new NoSuchElementException();
 			Node<T> aux = siguiente;
-			for (int i = 0; i < 2; i++) 
-				siguiente = siguiente.next;
+			try{
+				siguiente = siguiente.getTwoNext();
+			}catch(NullPointerException e){
+				/**Evita que estando en la ultima posicon de intente refrenciar al next del ultimo ya que seria null*/
+				siguiente = null;
+			}
 			return aux.element;
 		}
 
@@ -384,7 +390,7 @@ public class UnorderedSingleLinkedList<T> implements UnorderedListADT<T> {
 
 		@Override
 		public boolean hasNext() {
-			if(current_position+step > to+1 || siguiente == null)
+			if( siguiente == null)
 				return false;
 			else 
 				return true;
@@ -393,11 +399,18 @@ public class UnorderedSingleLinkedList<T> implements UnorderedListADT<T> {
 
 		@Override
 		public T next() {
+			if(siguiente==null) throw new NoSuchElementException();
 			Node<T> aux = siguiente;
 			for (int i = 0; i < step; i++) {
+				try{
 				siguiente = siguiente.next;
 				current_position++;
+				}catch(NullPointerException e){
+					siguiente=null;
+					break;
+				}
 			}
+			if(current_position > to+1 ) siguiente = null;
 			return aux.element;
 		}
 
