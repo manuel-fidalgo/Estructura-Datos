@@ -364,6 +364,7 @@ public class UnorderedSingleLinkedListTests {
 	}
 	lN1.getNodeAt(-1);
 	}
+	
 	@Test
 	public void test28(){
 		UnorderedSingleLinkedList<Number> lN2 = new UnorderedSingleLinkedList<Number>();
@@ -419,7 +420,7 @@ public class UnorderedSingleLinkedListTests {
 		}
 		lN1.getFirst();
 		lN1.getElementAt(-1);
-		assertTrue(true);
+		//assertTrue(true);
 	}
 	@Test
 	public void test33() throws EmptyCollectionException{
@@ -429,6 +430,74 @@ public class UnorderedSingleLinkedListTests {
 		Iterator<Number> iter = lN1.rangedIterator(4,10,3);
 		assertEquals(UnorderedSingleLinkedList.listWith(iter).toString(),"[4, 7, 10]");
 	}
+	@Test
+	public void test34(){
+		for (int i = 1; i <= 5; i++) {
+			lN1.addToRear(i);
+		}
+		assertEquals(lN1.size(),5);
+		assertEquals(lN1.getElementAt(1),1);
+		assertEquals(lN1.getElementAt(5),5);
+		assertEquals(lN1.replaceElementAt(3,0),3);
+		assertEquals(lN1.getElementAt(3),0);
+		assertEquals(lN1.removeElementAt(3),0);
+		assertEquals(lN1.size(),4);
+		assertEquals(lN1.getElementAt(3),4);
+	}
+	@Test (expected = IndexOutOfBoundsException.class)
+	public void test35(){
+		assertFalse(lN1.contains(0));
+		for (int i = 0; i < 5; i++) {
+			lN1.addToRear(i);
+		}
+		assertFalse(lN1.contains(9345));
+		lN1.replaceElementAt(-1, 0);
+	}
+	@Test (expected = IndexOutOfBoundsException.class)
+	public void test36(){
+		for (int i = 0; i < 5; i++) {
+			lN1.addToRear(i);
+		}
+		lN1.removeElementAt(9876);
+		
+	}
+	@Test (expected = IndexOutOfBoundsException.class)
+	public void test37(){
+		for (int i = 0; i < 5; i++) {
+			lN1.addToRear(i);
+		}
+		lN1.removeElementAt(99);
+		
+	}
+	@Test (expected = EmptyCollectionException.class)
+	public void test38() throws EmptyCollectionException{
+		lN1.removeFirst();
+		lN1.removeLast();
+	}
+	@Test (expected = IndexOutOfBoundsException.class)
+	public void test39(){
+		lN1.getElementAt(99);
+	}
+	@Test (expected = IndexOutOfBoundsException.class)
+	public void test40(){
+		lN1.getNodeAt(99);
+	}
+	@Test (expected = IndexOutOfBoundsException.class)
+	public void test41(){
+		lN1.removeElementAt(0);
+	}
+	@Test (expected = IndexOutOfBoundsException.class)
+	public void test42(){
+		lN1.replaceElementAt(99, 0);
+	}
+	@Test (expected = EmptyCollectionException.class)
+	public void test43() throws EmptyCollectionException{
+		lN1.removeLast();
+	}
+	@Test
+	public void test44(){
+		lN1.addToRear(9);
+	}
 	
-	
+
 }

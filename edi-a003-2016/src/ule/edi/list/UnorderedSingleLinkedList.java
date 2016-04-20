@@ -55,10 +55,11 @@ public class UnorderedSingleLinkedList<T> implements UnorderedListADT<T> {
 			addToRear(Vi);
 		}
 	}
-
+	/*
 	public Node<T> getFirts(){
 		return this.first;
 	}
+	*/
 
 	@Override
 	public void addToFront(T element) {
@@ -98,10 +99,9 @@ public class UnorderedSingleLinkedList<T> implements UnorderedListADT<T> {
 
 	@Override
 	public T removeLast() throws EmptyCollectionException {
-		if(first==null || this.size()==0){
-			throw new EmptyCollectionException(CLASSNAME);
-		}
-
+		//if(first==null) throw new EmptyCollectionException(CLASSNAME);
+		if(this.size()==0) throw new EmptyCollectionException(CLASSNAME);
+		
 		if(this.size()==1){
 			Node<T> aux = first;
 			this.first = null;
@@ -217,9 +217,9 @@ public class UnorderedSingleLinkedList<T> implements UnorderedListADT<T> {
 	 */
 	@Override
 	public T getElementAt(int i) throws IndexOutOfBoundsException {
-		if(i<1||i>size()){
-			throw new IndexOutOfBoundsException();
-		}
+		if(i<1) throw new IndexOutOfBoundsException();
+		//if(i>size()) throw new IndexOutOfBoundsException();
+
 		int currentpos=1;
 		Node<T> current = first;
 		while(current != null){
@@ -231,7 +231,8 @@ public class UnorderedSingleLinkedList<T> implements UnorderedListADT<T> {
 	}
 	/*Devuelve el nodo como que esta en la posicion que se le pasa como parametro*/
 	public Node<T> getNodeAt(int i) throws IndexOutOfBoundsException {
-		if(i<1||i>size()) throw new IndexOutOfBoundsException();
+		if(i<1) throw new IndexOutOfBoundsException();
+		//if(i>size()) throw new IndexOutOfBoundsException();
 
 		int currentpos=1;
 		Node<T> current = first;
@@ -247,15 +248,22 @@ public class UnorderedSingleLinkedList<T> implements UnorderedListADT<T> {
 
 	@Override
 	public T removeElementAt(int i) throws IndexOutOfBoundsException {
-		if(i<1 || i>size()) throw new IndexOutOfBoundsException();
+		if(i<1) throw new IndexOutOfBoundsException();
+		//if(i>size()) throw new IndexOutOfBoundsException();
+
 		int currentpos=1;
 		Node<T> current = first;
+		if(i==1){
+			Node<T> aux = first;
+			first = first.next;
+			return aux.element;
+		}
 		//Cuidado que el elemento a remover sea el ultimo
 		while(current != null){
 			if(currentpos==i){
 				//current pos elemento a devolver y eliminar;
 				Node<T> aux = current;
-				getNodeAt(i).next = current.next;
+				getNodeAt(i-1).next = current.next;
 				return aux.element; //El colector de basura se encargara de recoger el elementos sin referencia
 			}
 			current = current.next;
@@ -266,9 +274,9 @@ public class UnorderedSingleLinkedList<T> implements UnorderedListADT<T> {
 
 	@Override
 	public T replaceElementAt(int n, T element) {
-		if(n<1||n>size()){
-			throw new IndexOutOfBoundsException();
-		}
+		if(n<1) throw new IndexOutOfBoundsException();
+		//if(n>size()) throw new IndexOutOfBoundsException();
+
 		int currentpos=1;
 		Node<T> current = first;
 		while(current != null){
@@ -385,12 +393,12 @@ public class UnorderedSingleLinkedList<T> implements UnorderedListADT<T> {
 				currentpos++;
 			}
 			this.siguiente = current;
-			
+
 		}
 
 		@Override
 		public boolean hasNext() {
-			if( siguiente == null)
+			if( siguiente == null || this.current_position>to)
 				return false;
 			else 
 				return true;
@@ -403,8 +411,8 @@ public class UnorderedSingleLinkedList<T> implements UnorderedListADT<T> {
 			Node<T> aux = siguiente;
 			for (int i = 0; i < step; i++) {
 				try{
-				siguiente = siguiente.next;
-				current_position++;
+					siguiente = siguiente.next;
+					current_position++;
 				}catch(NullPointerException e){
 					siguiente=null;
 					break;
@@ -453,7 +461,7 @@ public class UnorderedSingleLinkedList<T> implements UnorderedListADT<T> {
 			}
 			if(!is) aux.addToRear(aux_element);
 		}
-		
+
 		return aux;
 	}
 
