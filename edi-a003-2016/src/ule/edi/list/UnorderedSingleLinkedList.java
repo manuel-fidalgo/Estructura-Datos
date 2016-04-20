@@ -370,12 +370,21 @@ public class UnorderedSingleLinkedList<T> implements UnorderedListADT<T> {
 			this.to = to;
 			this.step = step;
 			this.current_position = from;
-			this.siguiente = null;
+
+			int currentpos=1;
+			Node<T> current = first;
+			while(current != null){
+				if(currentpos==from) break;
+				current = current.next;
+				currentpos++;
+			}
+			this.siguiente = current;
+			
 		}
 
 		@Override
 		public boolean hasNext() {
-			if(current_position+step < to || siguiente == null)
+			if(current_position+step > to+1 || siguiente == null)
 				return false;
 			else 
 				return true;
@@ -475,7 +484,7 @@ public class UnorderedSingleLinkedList<T> implements UnorderedListADT<T> {
 		while(contents.hasNext()){
 			aux.addToRear(contents.next());
 		}
-		return null;
+		return aux;
 	}
 
 
