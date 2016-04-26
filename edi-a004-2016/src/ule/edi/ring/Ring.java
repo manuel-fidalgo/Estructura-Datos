@@ -102,9 +102,7 @@ public class Ring<T> implements Iterable<T> {
 	 * @return cuántos elementos hay en este anillo.
 	 */
 	public int size() {
-		
-		// TODO implementar el método
-		return 0;
+		return nElements;
 	}
 	
 	/**
@@ -135,8 +133,17 @@ public class Ring<T> implements Iterable<T> {
 	 */
 	protected Node<T> find(int direction, Node<T> start, T target) {
 	
-		// TODO implementar el método
-		return start;
+		while(true){
+			if(direction == FORWARD){
+				start = start.next;
+			}else{
+				start = start.previous;
+			}
+			if(start.content.equals(target)||start.equals(reference)){
+				return start;
+			}
+			
+		}
 	}
 
 	/**
@@ -145,9 +152,7 @@ public class Ring<T> implements Iterable<T> {
 	 * @return está este anillo vacío? 
 	 */
 	public boolean isEmpty() {
-		
-		// TODO implementar el método
-		return true;
+		return nElements==0 ? true : false;
 	}
 	
 	/**
@@ -158,8 +163,12 @@ public class Ring<T> implements Iterable<T> {
 	 * @param n un nodo en este anillo.
 	 */
 	protected void remove(Node<T> n) {
-		
-		// TODO implementar el método
+		if(!n.equals(reference)){
+			while(true){
+				if(false)
+				n = n.next;
+			}
+		}
 	}
 	
 	/**
