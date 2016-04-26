@@ -6,7 +6,7 @@ import org.junit.Test;
 public class RingTests {
 
 	private Ring<Integer> range(int a, int b) {
-		//Commit into git
+		
 		Ring<Integer> rx = new Ring<Integer>();
 		for (int i = a; i <= b; ++i) {
 			rx.insert(rx.reference(), Ring.BACKWARDS, i);
