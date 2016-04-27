@@ -68,12 +68,15 @@ public class Ring<T> implements Iterable<T> {
 				return true;
 
 			if (obj instanceof Node<?>) {
+				try{
+					Node<?> other = (Node<?>) obj;
+					if(other.content.equals(this.content)){
+						return true;
+					}else{
+						return false;
+					}
+				}catch(NullPointerException e){
 
-				Node<?> other = (Node<?>) obj;
-				if(other.content.equals(this.content)){
-					return true;
-				}else{
-					return false;
 				}
 			}
 
@@ -181,6 +184,7 @@ public class Ring<T> implements Iterable<T> {
 	 * 
 	 * @param n un nodo en este anillo.
 	 */
+	/*Correcto*/
 	protected void remove(Node<T> n) {
 		if(!n.equals(reference)){
 			Node<T> previus = n.previous;
@@ -218,22 +222,32 @@ public class Ring<T> implements Iterable<T> {
 	protected void insert(Node<T> base, int direction, T element) {
 		Node<T> insert = new Node<T>(element);
 		if(direction==FORWARD){
+
 			Node<T> next = base.next;
 
 			base.next = insert;
 			insert.previous = base;
-
-			insert.next = next;
-			next.previous = insert;
+			//Caso particual de que no haya elemtos en el anillo;
+			if(nElements==0){
+				insert.next = base;
+				base.previous = insert;
+			}else{
+				insert.next = next;
+				next.previous = insert;
+			}
 
 		}else{
 			Node<T> previus = base.previous;
 
 			base.previous = insert;
 			insert.next = base;
-
-			previus.next = insert;
-			insert.previous = previus;
+			if(nElements==0){
+				insert.previous = base;
+				base.next = insert;
+			}else{
+				previus.next = insert;
+				insert.previous = previus;
+			}
 		}
 		nElements++;
 	}
@@ -289,7 +303,7 @@ public class Ring<T> implements Iterable<T> {
 				if(current.equals(reference)){
 					return sb.toString();
 				}
-				sb.append(current);
+				sb.append(current.content);
 			}
 		}else{
 			while(true){
@@ -297,7 +311,7 @@ public class Ring<T> implements Iterable<T> {
 				if(current.equals(reference)){
 					return sb.toString();
 				}
-				sb.append(current);
+				sb.append(current.content);
 			}
 		}
 	}
@@ -385,6 +399,7 @@ public class Ring<T> implements Iterable<T> {
 		if (obj instanceof Ring<?>) {
 
 			Ring<?> other = (Ring<?>) obj;
+			if(other.nElements==0 && this.nElements==0) return true;
 			Node<?> other_node = other.reference;
 			Node<?> this_node = this.reference;
 			while(true){
