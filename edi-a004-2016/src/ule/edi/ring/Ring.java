@@ -187,10 +187,15 @@ public class Ring<T> implements Iterable<T> {
 	/*Correcto*/
 	protected void remove(Node<T> n) {
 		if(!n.equals(reference)){
-			Node<T> previus = n.previous;
-			Node<T> next = n.next;
-			previus.next = next;
-			next.previous = previus;
+			if(nElements==1){
+				reference.next=null;
+				reference.previous = null;
+			}else{
+				Node<T> previus = n.previous;
+				Node<T> next = n.next;
+				previus.next = next;
+				next.previous = previus;
+			}
 			nElements--;
 		}
 	}

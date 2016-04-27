@@ -1,5 +1,9 @@
 package ule.edi.ring;
 
+import static org.junit.Assert.*;
+
+import java.util.Iterator;
+
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -36,5 +40,60 @@ public class RingTests {
 		
 		Assert.assertEquals(3, x.size());
 	}
+	@Test
+	public void test00(){
+		int TAM = 100;
+		Ring<Integer> ring = range(1,TAM);
+		for (int i = 1; i < TAM; i++) {
+			assertEquals(ring.find(Ring.FORWARD,ring.reference(),i).content,new Integer(i));
+		}
+		for (int i = 1; i < TAM; i++) {
+			ring.remove(ring.reference().next);
+		}
+		ring.remove(ring.reference().next);
+		assertTrue(ring.nElements==0);
+	}
+	@Test
+	public void test01(){
+		Ring<Integer> ring = range(1,10);
+		Ring<Integer> other = new Ring<Integer>();
+		Iterator<Integer> iter = ring.forwardIterator();
+		while(iter.hasNext()){
+			other.insert(other.reference(), Ring.FORWARD, iter.next());
+		}
+		assertEquals(ring,other);
 		
+	}
+	@Test
+	public void test02(){
+		
+	}
+	@Test
+	public void test03(){
+		
+	}
+	@Test
+	public void test04(){
+		
+	}
+	@Test
+	public void test05(){
+		
+	}
+	@Test
+	public void test06(){
+		
+	}
+	@Test
+	public void test07(){
+		
+	}
+	@Test
+	public void test08(){
+		
+	}
+	@Test
+	public void test09(){
+		
+	}		
 }
