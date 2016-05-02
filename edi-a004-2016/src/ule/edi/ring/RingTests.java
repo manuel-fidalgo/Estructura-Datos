@@ -56,17 +56,32 @@ public class RingTests {
 	@Test
 	public void test01(){
 		Ring<Integer> ring = range(1,10);
+		
 		Ring<Integer> other = new Ring<Integer>();
+		
+		
 		Iterator<Integer> iter = ring.forwardIterator();
+		
+		
 		while(iter.hasNext()){
-			other.insert(other.reference(), Ring.FORWARD, iter.next());
+			other.insert(other.reference(), Ring.BACKWARDS, iter.next());
 		}
-		assertEquals(ring,other);
+		assertTrue(ring.equals(other));
+		//assertEquals(ring,other);
+		
 		
 	}
 	@Test
 	public void test02(){
+		Ring<Integer> ring = range(1,10);
+		Ring<Integer> other_ = new Ring<Integer>();
 		
+		Iterator<Integer> iter_ = ring.backwardsIterator();
+		
+		while(iter_.hasNext()){
+			other_.insert(other_.reference(), Ring.FORWARD, iter_.next());
+		}
+		assertEquals(ring,other_);
 	}
 	@Test
 	public void test03(){

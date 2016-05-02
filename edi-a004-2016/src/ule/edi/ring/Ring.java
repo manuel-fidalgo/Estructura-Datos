@@ -70,13 +70,14 @@ public class Ring<T> implements Iterable<T> {
 			if (obj instanceof Node<?>) {
 				try{
 					Node<?> other = (Node<?>) obj;
+					if(other.content==null && this.content==null) return true;
 					if(other.content.equals(this.content)){
 						return true;
 					}else{
 						return false;
 					}
 				}catch(NullPointerException e){
-
+					return false; //Alguno de los dos es null pero el otro no;
 				}
 			}
 
@@ -337,12 +338,13 @@ public class Ring<T> implements Iterable<T> {
 
 		public IteratorImpl(int direction) {
 			this.direction = direction;
-			if(direction==FORWARD)
-				current = reference.next;
-			else
-				current = reference.next;
-		}
 
+			if(this.direction==FORWARD){
+				current = reference.next;
+			}else if(this.direction==BACKWARDS){
+				current = reference.previous;
+			}
+		}
 		@Override
 		public boolean hasNext() {
 			if(!current.equals(reference)){
@@ -355,9 +357,9 @@ public class Ring<T> implements Iterable<T> {
 		@Override
 		public T next() {
 			Node<T> aux = current;
-			if(direction==FORWARD){
+			if(this.direction==FORWARD){
 				current = current.next;
-			}else{
+			}else if(this.direction==BACKWARDS){
 				current = current.previous;
 			}
 			return aux.content;
