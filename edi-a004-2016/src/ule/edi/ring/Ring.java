@@ -362,6 +362,7 @@ public class Ring<T> implements Iterable<T> {
 
 		@Override
 		public T next() {
+			if(!hasNext()) throw new UnsupportedOperationException();
 			Node<T> aux = current;
 			if(this.direction==FORWARD){
 				current = current.next;

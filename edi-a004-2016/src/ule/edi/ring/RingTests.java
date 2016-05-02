@@ -7,6 +7,8 @@ import java.util.Iterator;
 import org.junit.Assert;
 import org.junit.Test;
 
+import ule.edi.ring.Ring.Node;
+
 public class RingTests {
 
 	private Ring<Integer> range(int a, int b) {
@@ -146,6 +148,37 @@ public class RingTests {
 	}
 	@Test
 	public void test09(){
+		Ring<Integer> ring = range(1,20);
+		Node<Integer> aux = ring.reference();
+		assertEquals(aux.toString(),"(null)");
+		Node<Integer> decimo = null;
+		for (int i = 1; i <= 20; i++) {
+			aux = ring.find(Ring.FORWARD, aux, i);
+			if(i==10) decimo = aux;
+			assertEquals(aux.toString(),"("+i+")");
+		}
+		ring.insert(decimo, Ring.FORWARD, 37487345);
+		assertEquals(ring.find(ring.FORWARD,decimo,37487345),decimo.next);
+		assertNull(ring.find(ring.BACKWARDS,decimo,37487345).content);
+	}
+	@Test
+	public void test10(){
+		Ring<Integer> ring = range(1,8942);
+		Ring<Integer> ring_ = range(1,2);
+		Ring<Integer> ring_1 = new Ring<Integer>();
+		Ring<Integer> ring_2 = new Ring<Integer>();
 		
-	}		
+		assertFalse((ring.equals(new StringBuilder())));
+		assertFalse((ring.equals(ring_)));
+		assertTrue(ring_1.equals(ring_2));
+	}
+	@Test (expected = UnsupportedOperationException.class)
+	public void test11(){
+		Ring<Integer> ring = range(1,10);
+		Iterator<Integer> iter = ring.iterator();
+		while(true){
+			iter.next();
+		}
+	}
+	
 }
