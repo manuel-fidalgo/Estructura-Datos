@@ -162,10 +162,12 @@ public class Ring<T> implements Iterable<T> {
 			}else{
 				start = start.previous;
 			}
-			if(start.content.equals(target)||start.equals(reference)){
+			if(start.equals(reference) || start.content.equals(target)){
 				return start;
 			}
-
+			if(start.content.equals(target) || start.equals(reference)){
+				return start;
+			}
 		}
 	}
 
@@ -347,10 +349,14 @@ public class Ring<T> implements Iterable<T> {
 		}
 		@Override
 		public boolean hasNext() {
+			try{
 			if(!current.equals(reference)){
 				return true;
 			}else{
 				return false; 
+			}
+			}catch(NullPointerException e){
+				return false;
 			}
 		}
 
