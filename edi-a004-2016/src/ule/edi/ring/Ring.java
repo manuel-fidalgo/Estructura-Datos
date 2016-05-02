@@ -155,7 +155,8 @@ public class Ring<T> implements Iterable<T> {
 	 * @return un nodo encontrado, o el inicio 'start' si no se encuentra el dato.
 	 */
 	protected Node<T> find(int direction, Node<T> start, T target) {
-
+		if(target==null || isEmpty() || start.next==null || start.previous==null) return this.reference;
+		
 		while(true){
 			if(direction == FORWARD){
 				start = start.next;
@@ -163,9 +164,6 @@ public class Ring<T> implements Iterable<T> {
 				start = start.previous;
 			}
 			if(start.equals(reference) || start.content.equals(target)){
-				return start;
-			}
-			if(start.content.equals(target) || start.equals(reference)){
 				return start;
 			}
 		}
@@ -243,7 +241,6 @@ public class Ring<T> implements Iterable<T> {
 				insert.next = next;
 				next.previous = insert;
 			}
-
 		}else{
 			Node<T> previus = base.previous;
 
@@ -305,6 +302,7 @@ public class Ring<T> implements Iterable<T> {
 	public String toSequence(int direction) {
 		Node<T> current = reference;
 		StringBuffer sb = new StringBuffer();
+		if(nElements==0) return "";
 		if(direction==FORWARD){
 			while(true){
 				current = current.next;
@@ -340,21 +338,21 @@ public class Ring<T> implements Iterable<T> {
 
 		public IteratorImpl(int direction) {
 			this.direction = direction;
-
+			
 			if(this.direction==FORWARD){
 				current = reference.next;
-			}else if(this.direction==BACKWARDS){
+			}else{
 				current = reference.previous;
 			}
 		}
 		@Override
 		public boolean hasNext() {
 			try{
-			if(!current.equals(reference)){
-				return true;
-			}else{
-				return false; 
-			}
+				if(!current.equals(reference)){
+					return true;
+				}else{
+					return false; 
+				}
 			}catch(NullPointerException e){
 				return false;
 			}
@@ -362,11 +360,11 @@ public class Ring<T> implements Iterable<T> {
 
 		@Override
 		public T next() {
-			if(!hasNext()) throw new UnsupportedOperationException();
+			if(!hasNext()) throw new NoSuchElementException();
 			Node<T> aux = current;
 			if(this.direction==FORWARD){
 				current = current.next;
-			}else if(this.direction==BACKWARDS){
+			}else{
 				current = current.previous;
 			}
 			return aux.content;
@@ -411,11 +409,18 @@ public class Ring<T> implements Iterable<T> {
 			return true;
 
 		if (obj instanceof Ring<?>) {
+			Node<?> other_node;
+			Node<?> this_node;
 
 			Ring<?> other = (Ring<?>) obj;
 			if(other.nElements==0 && this.nElements==0) return true;
-			Node<?> other_node = other.reference;
-			Node<?> this_node = this.reference;
+			if(other.nElements!=this.nElements)return false;
+			try{
+				other_node = other.reference;
+				this_node = this.reference;
+			}catch(NullPointerException e){
+				return false;
+			}
 			while(true){
 				if(!other_node.equals(this_node)){
 					return false;
