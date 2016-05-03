@@ -155,15 +155,19 @@ public class Ring<T> implements Iterable<T> {
 	 * @return un nodo encontrado, o el inicio 'start' si no se encuentra el dato.
 	 */
 	protected Node<T> find(int direction, Node<T> start, T target) {
-		if(target==null || isEmpty() || start.next==null || start.previous==null) return this.reference;
+		if(target==null || isEmpty()) return this.reference;
 		
+		Node<T> aux = start;
 		while(true){
 			if(direction == FORWARD){
 				start = start.next;
 			}else{
 				start = start.previous;
 			}
-			if(start.equals(reference) || start.content.equals(target)){
+			if(start.equals(reference)){
+				return aux;
+			}
+			if(start.content.equals(target)){
 				return start;
 			}
 		}

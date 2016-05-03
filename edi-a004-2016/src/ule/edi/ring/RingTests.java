@@ -137,7 +137,7 @@ public class RingTests {
 		Ring<Integer> r = new Ring<Integer>();
 		r.insert(r.reference(),Ring.FORWARD,0);
 		r.insert(r.reference(),Ring.FORWARD,0);
-		assertEquals(r.find(Ring.BACKWARDS, r.find(Ring.FORWARD, r.reference(), 0), 0).toString(),"(null)");
+		assertEquals(r.find(Ring.BACKWARDS, r.find(Ring.FORWARD, r.reference(), 0), 0).toString(),"(0)");
 	}
 	
 	@Test
@@ -161,7 +161,7 @@ public class RingTests {
 		}
 		ring.insert(decimo, Ring.FORWARD, 37487345);
 		assertEquals(ring.find(ring.FORWARD,decimo,37487345),decimo.next);
-		assertNull(ring.find(ring.BACKWARDS,decimo,37487345).content);
+		assertEquals(ring.find(ring.BACKWARDS,decimo,37487345).content,new Integer(10));
 	}
 	@Test
 	public void test10(){
@@ -193,7 +193,7 @@ public class RingTests {
 		assertEquals(x,x);
 		assertEquals(x.reference(),x.reference());
 		assertTrue(x.isEmpty());
-		//System.out.println(x);
+		//assertEquals(x);
 		x.insert(x.reference(), Ring.FORWARD, 'A');
 		assertEquals("> (R) <> A <> (R) <", x.toString());
 		x.insert(x.reference(), Ring.FORWARD, 'B');
@@ -205,6 +205,7 @@ public class RingTests {
 		assertEquals(x.nElements,4);
 		x.remove(x.reference().next);
 		assertEquals(x.nElements,3);
+		//
 	}
 	@Test
 	public void test14(){
@@ -214,7 +215,25 @@ public class RingTests {
 		assertEquals("(null)",r.find(0, new Node<Integer>(3),4).toString());
 		assertEquals("(null)",r.find(0, new Node<Integer>(3).next = new Node<Integer>(0) ,2).toString());
 		r = range(1,10);
-		
+		Node<Integer> aux = r.find(Ring.FORWARD, r.reference(), 5);
+		assertEquals(aux.content,new Integer(5));
+		aux = r.find(Ring.FORWARD, aux, 5);
+		assertEquals(aux.content,new Integer(5));
+		aux = r.find(Ring.FORWARD, aux, 6);
+		assertEquals(aux.content,new Integer(6));
+		aux = r.find(Ring.FORWARD, aux, 7);
+		assertEquals(aux.content,new Integer(7));
+		aux = r.find(Ring.BACKWARDS, aux, 8);
+		assertEquals(aux.content,new Integer(7));
+		aux = r.find(Ring.BACKWARDS, aux, 1);
+		assertEquals(aux,r.reference().next);
+		aux = r.find(Ring.BACKWARDS, aux, 1);
+		assertEquals(aux,r.reference().next);
+		aux = r.find(Ring.FORWARD, aux, 10);
+		assertEquals(aux,r.reference().previous);
+		r = new Ring<Integer>();
+		aux = r.find(Ring.FORWARD, aux, 3);
+		System.out.println(aux);
 		
 	}
 	/**
@@ -232,11 +251,9 @@ public class RingTests {
 		Assert.assertEquals(x.reference(), x.find(Ring.FORWARD, x.reference(), x.reference().content));
 		Assert.assertEquals("(2)", x.find(Ring.BACKWARDS, x.reference(), 2).toString());
 		Assert.assertEquals("(2)", x.find(Ring.FORWARD, x.reference().next, 2).toString());
-		/*
 		Assert.assertEquals("(3)", x.find(Ring.BACKWARDS, x.reference().previous.previous, 3).toString());
 		Assert.assertEquals("(3)", x.find(Ring.FORWARD, x.reference().previous.previous, 3).toString());
 		Assert.assertEquals("(null)" , x.find(Ring.FORWARD, x.reference(), 8).toString());
-		*/
 	}
 
 	@Test
