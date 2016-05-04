@@ -116,6 +116,9 @@ public class Ring<T> implements Iterable<T> {
 	protected Ring() {
 
 		this.nElements=0;
+		reference.next = reference;
+		reference.previous = reference;
+		reference.content = null;
 
 	}
 
@@ -154,9 +157,10 @@ public class Ring<T> implements Iterable<T> {
 	 * @param target contenido a buscar.
 	 * @return un nodo encontrado, o el inicio 'start' si no se encuentra el dato.
 	 */
+
 	protected Node<T> find(int direction, Node<T> start, T target) {
 		if(target==null || isEmpty()) return this.reference;
-		
+
 		Node<T> aux = start;
 		while(true){
 			if(direction == FORWARD){
@@ -164,15 +168,47 @@ public class Ring<T> implements Iterable<T> {
 			}else{
 				start = start.previous;
 			}
-			if(start.equals(reference)){
+			if(start.equals(aux)){
 				return aux;
-			}
-			if(start.content.equals(target)){
-				return start;
+			} 
+			try{
+				if(start.content.equals(target)){
+					return start;
+				}
+			}catch(NullPointerException e){
+				//
 			}
 		}
 	}
+	
+	/*
+	protected Node<T> find(int direction, Node<T> start, T target) {
 
+	        Node<T> aux = start;
+	        if(target == null){
+	            return reference;
+	        }else{
+	            if(direction == BACKWARDS){
+	                aux = aux.previous;
+	            }else if(direction == FORWARD){
+	                aux = aux.next;
+	            }
+	            while(!aux.equals(start)){
+	                if(target.equals(aux.content)){
+	                    return aux;
+	                }
+	                if(direction == BACKWARDS){
+	                    aux = aux.previous;
+	                }else if(direction == FORWARD){
+	                    aux = aux.next;
+	                }
+	            }
+	            return start;
+	        }
+
+	    }
+	 */
+	
 	/**
 	 * Indica si el anillo es vacío.
 	 * 
@@ -189,12 +225,11 @@ public class Ring<T> implements Iterable<T> {
 	 * 
 	 * @param n un nodo en este anillo.
 	 */
-	/*Correcto*/
 	protected void remove(Node<T> n) {
 		if(!n.equals(reference)){
 			if(nElements==1){
-				reference.next=null;
-				reference.previous = null;
+				reference.next=reference;
+				reference.previous = reference;
 			}else{
 				Node<T> previus = n.previous;
 				Node<T> next = n.next;
@@ -237,26 +272,19 @@ public class Ring<T> implements Iterable<T> {
 
 			base.next = insert;
 			insert.previous = base;
-			//Caso particual de que no haya elemtos en el anillo;
-			if(nElements==0){
-				insert.next = base;
-				base.previous = insert;
-			}else{
-				insert.next = next;
-				next.previous = insert;
-			}
+			
+			insert.next = next;
+			next.previous = insert;
+
 		}else{
 			Node<T> previus = base.previous;
 
 			base.previous = insert;
 			insert.next = base;
-			if(nElements==0){
-				insert.previous = base;
-				base.next = insert;
-			}else{
-				previus.next = insert;
-				insert.previous = previus;
-			}
+
+			previus.next = insert;
+			insert.previous = previus;
+
 		}
 		nElements++;
 	}
@@ -304,26 +332,21 @@ public class Ring<T> implements Iterable<T> {
 	 * @return cadena con el contenido del anillo.
 	 */
 	public String toSequence(int direction) {
-		Node<T> current = reference;
 		StringBuffer sb = new StringBuffer();
+		
 		if(nElements==0) return "";
 		if(direction==FORWARD){
-			while(true){
-				current = current.next;
-				if(current.equals(reference)){
-					return sb.toString();
-				}
-				sb.append(current.content);
+			Iterator<T> iter = this.forwardIterator();
+			while(iter.hasNext()){
+				sb.append(iter.next());
 			}
 		}else{
-			while(true){
-				current = current.previous;
-				if(current.equals(reference)){
-					return sb.toString();
-				}
-				sb.append(current.content);
+			Iterator<T> iter = this.backwardsIterator();
+			while(iter.hasNext()){
+				sb.append(iter.next());
 			}
 		}
+		return sb.toString();
 	}
 
 	/**
@@ -342,7 +365,7 @@ public class Ring<T> implements Iterable<T> {
 
 		public IteratorImpl(int direction) {
 			this.direction = direction;
-			
+
 			if(this.direction==FORWARD){
 				current = reference.next;
 			}else{
