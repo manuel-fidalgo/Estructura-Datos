@@ -212,8 +212,6 @@ public class RingTests {
 		Ring<Integer> r = new Ring<Integer>();
 		assertEquals("(null)",r.find(0, r.reference(),2).toString());
 		assertEquals("(null)",r.find(0, r.reference(),null).toString());
-//		assertEquals("(null)",r.find(0, new Node<Integer>(3),4).toString());
-//		assertEquals("(null)",r.find(0, new Node<Integer>(3).next = new Node<Integer>(0) ,2).toString());
 		r = range(1,10);
 		Node<Integer> aux = r.find(Ring.FORWARD, r.reference(), 5);
 		assertEquals(aux.content,new Integer(5));
