@@ -171,14 +171,15 @@ public class Ring<T> implements Iterable<T> {
 			}else{
 				aux = aux.previous;
 			}
-			if(aux.equals(start)){
-				return start;
-			} 
 			try{
 				if(aux.content.equals(target)){
 					return aux;
 				}
 			}catch(NullPointerException e){}
+			if(aux.equals(start)){
+				return start;
+			} 
+			
 			
 		}
 	}

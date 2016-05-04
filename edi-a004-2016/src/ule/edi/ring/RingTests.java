@@ -160,8 +160,8 @@ public class RingTests {
 			assertEquals(aux.toString(),"("+i+")");
 		}
 		ring.insert(decimo, Ring.FORWARD, 37487345);
-		assertEquals(ring.find(ring.FORWARD,decimo,37487345),decimo.next);
-		assertEquals(ring.find(ring.BACKWARDS,decimo,37487345).content,new Integer(37487345));
+		assertEquals(ring.find(Ring.FORWARD,decimo,37487345),decimo.next);
+		assertEquals(ring.find(Ring.BACKWARDS,decimo,37487345).content,new Integer(37487345));
 	}
 	@Test
 	public void test10(){
@@ -286,8 +286,8 @@ public class RingTests {
 			rx.insert(rx.reference(), Ring.FORWARD, i);
 		}
 		Iterator<Integer> iter = rx.iterator();
-		Iterator<Integer> iterBack = rx.backwardsIterator();
-		Iterator<Integer> iterFor = rx.forwardIterator();
+	//	Iterator<Integer> iterBack = rx.backwardsIterator();
+	//	Iterator<Integer> iterFor = rx.forwardIterator();
 		String cadena = "";
 		while(iter.hasNext()){
 			cadena = cadena + iter.next().toString();
@@ -341,6 +341,35 @@ public class RingTests {
 		Assert.assertEquals("234", x.toSequence(Ring.FORWARD));
 
 		Assert.assertEquals(3, x.size());
+	}
+	@Test
+	public void test_failed_01(){
+		 Ring<Integer> l1 = new Ring<Integer>();
+	        
+	        l1.insert(l1.reference(), Ring.FORWARD, 1);
+	        l1.insert(l1.reference(), Ring.FORWARD, 2);
+	        l1.insert(l1.reference(), Ring.FORWARD, 1);
+	        l1.insert(l1.reference(), Ring.FORWARD, 3);
+	        
+	        Ring.Node<Integer> x;
+	        Ring.Node<Integer> y;
+	        
+	        y = x = l1.find(Ring.FORWARD, l1.reference(), 1);
+	        
+	        Assert.assertEquals(1, x.content.intValue());
+	        Assert.assertEquals(2, x.next.content.intValue());
+	        
+	        y = l1.find(Ring.FORWARD, y, 1);
+	        
+	        Assert.assertEquals(1, y.content.intValue());
+	        Assert.assertTrue(l1.reference() == y.next);
+	        
+	        y = l1.find(Ring.FORWARD, y, 1);
+
+	        Assert.assertTrue(x == y);
+	        
+	        Assert.assertEquals(1, y.content.intValue());
+	        Assert.assertEquals(2, y.next.content.intValue());
 	}
 
 }
