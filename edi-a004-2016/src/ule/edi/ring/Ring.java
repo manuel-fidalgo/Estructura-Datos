@@ -115,7 +115,7 @@ public class Ring<T> implements Iterable<T> {
 
 	protected Ring() {
 
-		this.nElements=0;
+		this.nElements = 0;
 		reference.next = reference;
 		reference.previous = reference;
 		reference.content = null;
@@ -159,25 +159,27 @@ public class Ring<T> implements Iterable<T> {
 	 */
 
 	protected Node<T> find(int direction, Node<T> start, T target) {
-		if(target==null || isEmpty()) return this.reference;
+		if(target==null){
+			return this.reference;
+		}
 
 		Node<T> aux = start;
+		
 		while(true){
 			if(direction == FORWARD){
-				start = start.next;
+				aux = aux.next;
 			}else{
-				start = start.previous;
+				aux = aux.previous;
 			}
-			if(start.equals(aux)){
-				return aux;
+			if(aux.equals(start)){
+				return start;
 			} 
 			try{
-				if(start.content.equals(target)){
-					return start;
+				if(aux.content.equals(target)){
+					return aux;
 				}
-			}catch(NullPointerException e){
-				//
-			}
+			}catch(NullPointerException e){}
+			
 		}
 	}
 	
@@ -338,12 +340,12 @@ public class Ring<T> implements Iterable<T> {
 		if(direction==FORWARD){
 			Iterator<T> iter = this.forwardIterator();
 			while(iter.hasNext()){
-				sb.append(iter.next());
+				sb.append(iter.next().toString());
 			}
 		}else{
 			Iterator<T> iter = this.backwardsIterator();
 			while(iter.hasNext()){
-				sb.append(iter.next());
+				sb.append(iter.next().toString());
 			}
 		}
 		return sb.toString();
