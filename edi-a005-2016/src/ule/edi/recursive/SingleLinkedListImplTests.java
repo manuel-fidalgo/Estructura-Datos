@@ -57,9 +57,9 @@ public class SingleLinkedListImplTests {
 			lS.addToRear(ABC_[i]);
 		}
 		assertEquals("[A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R, S, T, U, V, W, X, Y, Z]",lS.toString());
+		lS.dropElements(ABC_.length-2);
+		assertEquals("[Y, Z]",lS.toString());
 		lS.dropElements(30);
-		System.out.println(lS);
+		assertEquals("[]",lS.toString());
 	}
-	
-	
 }

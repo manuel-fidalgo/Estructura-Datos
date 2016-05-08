@@ -66,7 +66,7 @@ public class SingleLinkedListImpl<T> extends AbstractSingleLinkedList<T> {
 			this.first = current;
 			return;
 		}else if(current.next==null){
-			//Se ha acabado la lista, devolvemos la vacia
+			this.first = null;
 			return;
 		}else{
 			cout++;
