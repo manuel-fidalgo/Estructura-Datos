@@ -31,16 +31,59 @@ public class SingleLinkedListImpl<T> extends AbstractSingleLinkedList<T> {
 
 	@Override
 	public boolean isAscend() {
-		// TODO Implementar de forma recursiva
-		return false;
+		return isAscendOrDescendRec(this.first,true);
 	}
-
 
 	@Override
 	public boolean isDescend() {
+		return isAscendOrDescendRec(this.first,false);
+	}
+	/**
+	 * @param current nodo que estamos en cada una de las llamadas recursivas
+	 * @param status true is para evaluar si es ascende, false para evaluar si es descendente
+	 * @return true o false si segun el parametro status
+	 */
+	private boolean isAscendOrDescendRec(Node<T> current,boolean status){
+		if(current==null || current.next==null){ //Caso que hayamos iterado la lista por completo o que la lista este vacia o con solo un elemento
+			return true;
+		}
 
-		// TODO Implementar de forma recursiva
-		return false;
+		T current_element = current.content;
+		T next_element = current.next.content;
+
+		if(status){
+			if(areAscend(current_element,next_element)){
+				return isAscendOrDescendRec(current.next,status);
+			}else{
+				return false;
+			}
+		}else{
+			if(areDescend(current_element,next_element)){
+				return isAscendOrDescendRec(current.next,status);
+			}else{
+				return false;
+			}
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	private boolean areAscend(T current_element, T next_element) {
+		Comparable<T> c1 = (Comparable<T>) current_element;
+		if(c1.compareTo(next_element)<=0){
+			return true;
+		}else{
+			return false;
+		}
+
+	}
+	@SuppressWarnings("unchecked")
+	private boolean areDescend(T current_element, T next_element){
+		Comparable<T> c1 = (Comparable<T>) current_element;
+		if(c1.compareTo(next_element)>=0){
+			return true;
+		}else{
+			return false;
+		}
 	}
 
 	@Override
@@ -104,7 +147,7 @@ public class SingleLinkedListImpl<T> extends AbstractSingleLinkedList<T> {
 			return reverseRec(original, reversed, curret.next);
 		}
 	}
-	
+
 
 	@Override
 	public SimpleListADT<T> repeatAllElements() {
@@ -114,7 +157,7 @@ public class SingleLinkedListImpl<T> extends AbstractSingleLinkedList<T> {
 			return repeatAllElementsRec(this, new SingleLinkedListImpl<T>(), this.first);
 		}
 	}
-	
+
 	public SimpleListADT<T> repeatAllElementsRec(SimpleListADT<T> lista, SimpleListADT<T> list_rep,Node<T> current) {
 		if(current==null){
 			return list_rep;
@@ -124,25 +167,30 @@ public class SingleLinkedListImpl<T> extends AbstractSingleLinkedList<T> {
 		}
 	}
 
-	
+
 	@Override
 	public SimpleListADT<T> repeatNElements(int n) {
 		if(this.first==null){
 			return this;
 		}else{
-			return repeaNElementsRec(this, new SingleLinkedListImpl<T>(), this.first, n);
+			return repeaNElementsRec(this, new SingleLinkedListImpl<T>(), this.first, n,0);
 		}
 	}
 
-	private SimpleListADT<T> repeaNElementsRec(SimpleListADT<T> lista, SimpleListADT<T> list_rep, Node<T> current ,int n) {
+	private SimpleListADT<T> repeaNElementsRec(SimpleListADT<T> lista, SimpleListADT<T> list_rep, Node<T> current ,int n, int cout) {
 		if(current==null){
 			return list_rep;
 		}else{
-			addToRearNTimes(list_rep,current.content,n,0);
-			return repeaNElementsRec(lista, list_rep, current.next,n);
+			if(cout<n){
+				addToRearNTimes(list_rep,current.content,2,0);
+			}else{
+				addToRearNTimes(list_rep, current.content,1,0);
+			}
+			cout++;
+			return repeaNElementsRec(lista, list_rep, current.next,n,cout);
 		}
 	}
-	
+
 	private void addToRearNTimes(SimpleListADT<T> list_rep, T element, int nveces, int cout){
 		if(cout==nveces){
 			return;

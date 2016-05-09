@@ -115,8 +115,46 @@ public class SingleLinkedListImplTests {
 				l2.addToRear(ABC_[i]);
 			}
 		}
-		System.out.println(l1.repeatNElements(5).toString());
-		System.out.println(l2.toString());
-		assertEquals(l1.repeatNElements(5).toString(),l2.toString());
+		assertEquals(l1.repeatNElements(5).toString(),"[A, A, B, B, C, C, D, D, E, E, F, G, H, I, J, K, L, M, N, O, P, Q, R, S, T, U, V, W, X, Y, Z]");
+	}
+	@Test
+	public void test05(){
+		SimpleListADT<String> l1 = new SingleLinkedListImpl<String>();
+		SimpleListADT<String> l2 = new SingleLinkedListImpl<String>();
+		assertTrue(l1.isAscend());
+		assertTrue(l2.isAscend());
+		assertTrue(l1.isDescend());
+		assertTrue(l2.isDescend());
+		
+		for (int i = 0; i < ABC_.length; i++) {
+			l1.addToRear(ABC_[i]);
+			l2.addFirst(ABC_[i]);
+		}
+		assertTrue(l1.isAscend());
+		assertFalse(l1.isDescend());
+		assertTrue(l2.isDescend());
+		assertFalse(l2.isAscend());
+		l1 = new SingleLinkedListImpl<>("A");
+		assertTrue(l1.isAscend());
+		assertTrue(l1.isDescend());
+		l1.addToRear("B");
+		assertTrue(l1.isAscend());
+		l1.addToRear("A");
+		assertFalse(l1.isAscend());
+		assertFalse(l1.isDescend());
+		l2 = new SingleLinkedListImpl<>();
+		for (int i = 0; i < ABC_.length; i++) {
+			l2.addToRear("X");
+		}
+		assertTrue(l2.isAscend());
+		assertTrue(l2.isDescend());
+	}
+	@Test
+	public void test06(){
+		SimpleListADT<String> l1 = new SingleLinkedListImpl<String>("A");
+		assertEquals(l1.repeatNElements(1).toString(),"[A, A]");
+		SimpleListADT<String> l2 = new SingleLinkedListImpl<String>("A","B","C");
+		assertEquals(l2.repeatNElements(0).toString(),l2.toString());
+		
 	}
 }
