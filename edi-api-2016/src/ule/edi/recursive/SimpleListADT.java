@@ -109,5 +109,4 @@ public interface SimpleListADT<T> {
 	 * @return <tt>true</tt> si esta lista es vacía.
 	 */
 	public boolean isEmpty();
-
 }
