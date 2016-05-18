@@ -38,6 +38,7 @@ import java.util.Queue;
  * @author profesor
  *
  */
+@SuppressWarnings("unused")
 public class World extends AbstractBinaryTreeADT<LinkedList<Entity>> {
 
 	/**
