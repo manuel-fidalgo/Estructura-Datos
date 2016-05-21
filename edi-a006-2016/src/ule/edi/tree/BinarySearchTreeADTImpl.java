@@ -282,16 +282,16 @@ AbstractBinaryTreeADT<T> {
 	public long countEmpty() {
 		return countEmptyRec(this.leftSubtree)+countEmptyRec(this.leftSubtree);
 	}
-	
+
 	public long countEmptyRec(AbstractBinaryTreeADT<T> subtree){
 		if(subtree.isEmpty()){
 			return 1;
 		}else{
 			return countEmptyRec(subtree.rightSubtree)+countEmptyRec(subtree.leftSubtree);
 		}
-		
+
 	}
-	
+
 	/**
 	 * Indica el nÃºmero de elementos en niveles impares.
 	 * 
@@ -313,10 +313,20 @@ AbstractBinaryTreeADT<T> {
 	 * 
 	 * @return nÃºmero de elementos en niveles impares.
 	 */
-	
+
 	public long countOddLevelElements() {
 
-		return 0;
+		return countOddLevelsRec(1,0);
+	}
+
+	private long countOddLevelsRec(int currentlevel,int acum) {
+		if(currentlevel%2!=0){
+			acum++;
+		}
+		if(this.content==null){
+			return acum;
+		}
+		return this.getLeftBST().countOddLevelsRec(currentlevel, acum)+this.getRightBST().countOddLevelsRec(currentlevel, acum);
 	}
 
 	/**
@@ -344,7 +354,7 @@ AbstractBinaryTreeADT<T> {
 	 * 
 	 * @param buffer lista con el resultado.
 	 */
-	
+
 	public void parentChildPairs(List<String> buffer) {
 
 		// TODO Implementar el mÃ©todo
@@ -382,10 +392,29 @@ AbstractBinaryTreeADT<T> {
 	 * @throws NoSuchElementException si el camino no alcanza un nodo en el Ã¡rbol
 	 * @throws IllegalArgumentException si el camino no contiene sÃ³lamente 0s y 1s
 	 */
+
 	public T getContentWithPath(String path) {
+		return getContentRec(new StringBuffer(path));
+	}
 
-		// TODO Implementar el mÃ©todo
-		return null;
+	private T getContentRec(StringBuffer sb) {
+
+		char us = sb.charAt(0);
+		if(sb.length()==0){
+			return this.content;
+		}else{
+			sb.deleteCharAt(0);
+			try{
+				if(us == '0'){
+					return this.getLeftBST().getContentRec(sb);
+				}else if(us == '1'){
+					return this.getRightBST().getContentRec(sb);
+				}else{
+					throw new IllegalArgumentException(sb.toString()+"Error in characeter:"+us);
+				}
+			}catch(NullPointerException e){
+				throw new NoSuchElementException();
+			}
+		}
 	}	
-
 }
