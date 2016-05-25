@@ -47,43 +47,43 @@ public class World extends AbstractBinaryTreeADT<LinkedList<Entity>> {
 	 * @return
 	 */
 	protected World travelLeft() {
-		
+
 		return (World) leftSubtree;
 	}
 
 	private void setLeft(World left) {
-		
+
 		this.leftSubtree = left;
 	}
-	
+
 	/**
 	 * Devuelve el mundo al que se llega al avanzar a la derecha.
 	 * 
 	 * @return
 	 */
 	protected World travelRight() {
-		
+
 		return (World) rightSubtree;
 	}
 
 	private void setRight(World right) {
-		
+
 		this.rightSubtree = right;
 	}
-	
+
 	private World() {
-		
+
 		//	Crea un mundo vacío
 		this.content = null;
-		
+
 		this.leftSubtree = this.rightSubtree = null;
 	}
-	
+
 	public static World createEmptyWorld() {
-		
+
 		return new World();
 	}
-	
+
 	/**
 	 * Inserta la entidad indicada en este árbol.
 	 * 
@@ -99,44 +99,70 @@ public class World extends AbstractBinaryTreeADT<LinkedList<Entity>> {
 	 * Por ejemplo, en un árbol vacío se pide insertar un 'dragón' en la
 	 * dirección "LL". El resultado final será:
 	 * 
-     * [F(1)]
-     * |  [F(1)]
-     * |  |  [D(1)]
-     * |  |  |  ∅
-     * |  |  |  ∅
-     * |  |  ∅
-     * |  ∅
-     * 
-     * La dirección "" indica la raíz, de forma que insertar un 'guerrero' en
-     * "" en el árbol anterior genera:
-     * 
-     * [F(1), W(1)]
-     * |  [F(1)]
-     * |  |  [D(1)]
-     * |  |  |  ∅
-     * |  |  |  ∅
-     * |  |  ∅
-     * |  ∅
-     * 
-     * La inserción tiene en cuenta la cardinalidad, de forma que al volver a
-     * insertar un guerrero en "" se tiene:
-     * 
-     * [F(1), W(2)]
-     * |  [F(1)]
-     * |  |  [D(1)]
-     * |  |  |  ∅
-     * |  |  |  ∅
-     * |  |  ∅
-     * |  ∅
-     *  
+	 * [F(1)]
+	 * |  [F(1)]
+	 * |  |  [D(1)]
+	 * |  |  |  ∅
+	 * |  |  |  ∅
+	 * |  |  ∅
+	 * |  ∅
+	 * 
+	 * La dirección "" indica la raíz, de forma que insertar un 'guerrero' en
+	 * "" en el árbol anterior genera:
+	 * 
+	 * [F(1), W(1)]
+	 * |  [F(1)]
+	 * |  |  [D(1)]
+	 * |  |  |  ∅
+	 * |  |  |  ∅
+	 * |  |  ∅
+	 * |  ∅
+	 * 
+	 * La inserción tiene en cuenta la cardinalidad, de forma que al volver a
+	 * insertar un guerrero en "" se tiene:
+	 * 
+	 * [F(1), W(2)]
+	 * |  [F(1)]
+	 * |  |  [D(1)]
+	 * |  |  |  ∅
+	 * |  |  |  ∅
+	 * |  |  ∅
+	 * |  ∅
+	 *  
 	 * @param address dirección donde insertar la entidad.
 	 * @param e entidad a insertar.
 	 */
 	public void insert(String address, Entity e) {
-		
-		// TODO Implementar el método
+		insertRec(new StringBuilder(address),e);
 	}
-	
+
+	private void insertRec(StringBuilder sb, Entity e) {
+		char first;
+		if(sb.length()==0){  //Estamos en el nodo a insertar
+			this.content.add(e);
+		}else{
+			first = sb.charAt(0);
+			sb.deleteCharAt(0);
+			if(first=='L'){
+				if(this.travelLeft()==null){
+					this.setLeft(new World());
+					this.travelLeft().content = new LinkedList<Entity>();
+					this.travelLeft().content.add(new Entity(Entity.FOREST));
+				}
+				this.travelLeft().insertRec(sb,e);
+			}
+			if(first=='R'){
+				if(this.travelRight()==null) {
+					this.setRight(new World());
+					this.travelRight().content = new LinkedList<Entity>();
+					this.travelRight().content.add(new Entity(Entity.FOREST));
+				}
+				this.travelRight().insertRec(sb,e);
+				
+			}
+		}
+	}
+
 	/**
 	 * Indica cuántos castillos hay a no más de la distancia indicada.
 	 * 
@@ -145,30 +171,30 @@ public class World extends AbstractBinaryTreeADT<LinkedList<Entity>> {
 	 * 
 	 * Por ejemplo, en el mundo:
 	 * 
-     * [C(1)]
-     * |  [C(1)]
-     * |  |  ∅
-     * |  |  ∅
-     * |  [D(1)]
-     * |  |  [C(1)]
-     * |  |  |  ∅
-     * |  |  |  ∅
-     * |  |  [C(1)]
-     * |  |  |  ∅
-     * |  |  |  ∅
-     * 
-     * hay 1 castillo a no más de 0 de distancia, 2 a no más de 1 y 4 a no
-     * más de 2.
-     * 
+	 * [C(1)]
+	 * |  [C(1)]
+	 * |  |  ∅
+	 * |  |  ∅
+	 * |  [D(1)]
+	 * |  |  [C(1)]
+	 * |  |  |  ∅
+	 * |  |  |  ∅
+	 * |  |  [C(1)]
+	 * |  |  |  ∅
+	 * |  |  |  ∅
+	 * 
+	 * hay 1 castillo a no más de 0 de distancia, 2 a no más de 1 y 4 a no
+	 * más de 2.
+	 * 
 	 * @param distance límite de distancia
 	 * @return número de castillos a no más de esa distancia.
 	 */
 	public long countCastlesCloserThan(long distance) {
-	
+
 		// TODO Implementar el método
 		return 0;
 	}
-	
+
 	/**
 	 * Indica cuántas entidades del tipo dado hay en un nivel.
 	 * 
@@ -177,74 +203,74 @@ public class World extends AbstractBinaryTreeADT<LinkedList<Entity>> {
 	 * @return cuántas entidades de ese tipo hay en ese nivel.
 	 */
 	public long countAtLevel(int type, int n) {
-		
+
 		// TODO Implementar el método	
 		return 0;
 	}
-			
+
 	/**
 	 * Localiza la n-ésima princesa en in-orden.
 	 * 
 	 * Por ejemplo, en este mundo:
 	 * 
-     * [F(1)]
-     * |  [F(1)]
-     * |  |  [D(1)]
-     * |  |  |  ∅
-     * |  |  |  ∅
-     * |  |  [C(1)]
-     * |  |  |  [P(1)]
-     * |  |  |  |  ∅
-     * |  |  |  |  [P(2)]
-     * |  |  |  |  |  ∅
-     * |  |  |  |  |  ∅
-     * |  |  |  ∅
-     * |  ∅
-     * 
-     * la primera princesa está en 
-     * 
-     * 	[L, R, L]
-     * 
-     * y la segunda y tercera están ambas en
-     * 
-     * 	[L, R, L, R]
-     * 
+	 * [F(1)]
+	 * |  [F(1)]
+	 * |  |  [D(1)]
+	 * |  |  |  ∅
+	 * |  |  |  ∅
+	 * |  |  [C(1)]
+	 * |  |  |  [P(1)]
+	 * |  |  |  |  ∅
+	 * |  |  |  |  [P(2)]
+	 * |  |  |  |  |  ∅
+	 * |  |  |  |  |  ∅
+	 * |  |  |  ∅
+	 * |  ∅
+	 * 
+	 * la primera princesa está en 
+	 * 
+	 * 	[L, R, L]
+	 * 
+	 * y la segunda y tercera están ambas en
+	 * 
+	 * 	[L, R, L, R]
+	 * 
 	 * @param n posición relativa entre las princesas en in-orden, n >= 1
 	 * @param rx camino del nodo que contiene a la princesa encontrada.
 	 * @return <code>true</code> si la encontró.
 	 */
 	public boolean findNPrincessInorden(long n, LinkedList<Character> rx) {
-		
+
 		// TODO Implementar el método
 		return false;
 	}
-		
+
 	/**
 	 * Busca el primer dragón en anchura y devuelve cuántos nodos hay antes.
 	 * 
 	 * Los nodos vacíos no se cuentan. Por ejemplo, aquí devolvería 2:
 	 * 
-     * [F(1)]
-     * |  [F(1)]
-     * |  |  [D(1)]
-     * |  |  |  ∅
-     * |  |  |  ∅
-     * |  |  [C(1)]
-     * |  |  |  [P(1)]
-     * |  |  |  |  ∅
-     * |  |  |  |  [P(2)]
-     * |  |  |  |  |  ∅
-     * |  |  |  |  |  ∅
-     * |  |  |  ∅
-     * |  ∅
-     * 
+	 * [F(1)]
+	 * |  [F(1)]
+	 * |  |  [D(1)]
+	 * |  |  |  ∅
+	 * |  |  |  ∅
+	 * |  |  [C(1)]
+	 * |  |  |  [P(1)]
+	 * |  |  |  |  ∅
+	 * |  |  |  |  [P(2)]
+	 * |  |  |  |  |  ∅
+	 * |  |  |  |  |  ∅
+	 * |  |  |  ∅
+	 * |  ∅
+	 * 
 	 * Si no hubiera ningún dragón, devolverá el número de nodos no vacíos
 	 * en el mundo.
 	 * 
 	 * @return el número de nodos no vacíos que ha recorrido antes del dragón.
 	 */
 	public long findFirstDragonInBreadthOrder() {
-		
+
 		//	TODO Implementar el método		
 		return 0;
 	}
