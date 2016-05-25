@@ -3,6 +3,7 @@ package ule.edi.tree;
 import java.util.LinkedList;
 
 import org.junit.Before;
+import org.junit.Test;
 
 public class BinarySearchTreeADTImplTests {
 	
@@ -89,6 +90,12 @@ public class BinarySearchTreeADTImplTests {
 		TEx.insert(10, 20, 30, 5);
 		
 		lS = new LinkedList<String>();
+	}
+	
+	@Test
+	public void test00(){
+		Integer element = T1234.getContentWithPath("0");
+		System.out.println(element);
 	}
 
 }

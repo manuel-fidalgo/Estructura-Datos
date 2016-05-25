@@ -398,11 +398,13 @@ AbstractBinaryTreeADT<T> {
 	}
 
 	private T getContentRec(StringBuffer sb) {
-
-		char us = sb.charAt(0);
+		
+		char us;
+		
 		if(sb.length()==0){
 			return this.content;
 		}else{
+			us = sb.charAt(0);
 			sb.deleteCharAt(0);
 			try{
 				if(us == '0'){
