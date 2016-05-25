@@ -316,20 +316,25 @@ AbstractBinaryTreeADT<T> {
 
 	public long countOddLevelElements() {
 
-		return countOddLevelsRec(1,0);
+		return countOddLevelsRec(1);
 	}
 
-	private long countOddLevelsRec(int currentlevel,int acum) {
-		if(currentlevel%2!=0){
-			acum++;
-		}
+	private long countOddLevelsRec(int currentlevel) {
+
 		if(this.content==null){
-			return acum;
+			return 0;
 		}
-		return this.getLeftBST().countOddLevelsRec(currentlevel, acum)+this.getRightBST().countOddLevelsRec(currentlevel, acum);
+		if(currentlevel%2!=0){
+			currentlevel++;
+			return 1 + this.getLeftBST().countOddLevelsRec(currentlevel)+this.getRightBST().countOddLevelsRec(currentlevel);
+		}else{
+			currentlevel++;
+			return this.getLeftBST().countOddLevelsRec(currentlevel)+this.getRightBST().countOddLevelsRec(currentlevel);
+		}
+
 	}
 
-	/**
+	/*
 	 * Acumula en pre-orden, una lista con los pares 'padre-hijo' en este Ã¡rbol.
 	 * 
 	 * Por ejemplo, sea un Ã¡rbol "A":
@@ -356,8 +361,23 @@ AbstractBinaryTreeADT<T> {
 	 */
 
 	public void parentChildPairs(List<String> buffer) {
+		if(this.content==null){
+			return;
+		}
 
-		// TODO Implementar el mÃ©todo
+		if(this.getLeftBST().content != null){
+			buffer.add(createString(this, this.getLeftBST()));
+			this.getLeftBST().parentChildPairs(buffer);//LLamada por la izquierda
+		}
+
+		if(this.getRightBST().content!=null){
+			buffer.add(createString(this, this.getRightBST()));
+			this.getRightBST().parentChildPairs(buffer); //Llamada por la derecha
+		}
+	}
+	public String createString(BinarySearchTreeADTImpl<T> a, BinarySearchTreeADTImpl<T> b){
+		
+			return "("+a.content.toString()+","+b.content.toString()+")";
 	}
 
 	/**
@@ -394,13 +414,14 @@ AbstractBinaryTreeADT<T> {
 	 */
 
 	public T getContentWithPath(String path) {
+		//Habria que comprobar primerp que la cadena tiene el formato correcto
 		return getContentRec(new StringBuffer(path));
 	}
 
 	private T getContentRec(StringBuffer sb) {
-		
+
 		char us;
-		
+
 		if(sb.length()==0){
 			return this.content;
 		}else{
