@@ -255,6 +255,9 @@ public class World extends AbstractBinaryTreeADT<LinkedList<Entity>> {
 		public boolean getBoolValue(){
 			return this.n==1 ? true : false;
 		}
+		public String toString(){
+			return Long.toString(this.n);
+		}
 	}
 	/**
 	 * 
@@ -331,30 +334,48 @@ public class World extends AbstractBinaryTreeADT<LinkedList<Entity>> {
 	 * @param rx camino del nodo que contiene a la princesa encontrada.
 	 * @return <code>true</code> si la encontró.
 	 */
-	
-	/*ver si la princesa enesima esta en la posicion dada por la ruta*/
-	
+
+	/*devolver la ruta donde se encuentra la princesa enesima*/
+
 	public boolean findNPrincessInorden(long n, LinkedList<Character> rx) {
+		if(n<1) throw new IllegalArgumentException();
+		if(this.isEmpty()) return false;
 		_int bool = new _int(0);
 		_int princessFound = new _int(0);
 		findNPrincessInordenRec(this,n,rx,bool,princessFound);
-		return bool.get()!=0 ?  true : false;
+		if(!bool.getBoolValue()){
+			rx = new LinkedList<>();
+		}
+		return bool.getBoolValue();
 	}
 
 	private void findNPrincessInordenRec(World origin, long n, LinkedList<Character> list, _int bool, _int princessFound) {
-		princessFound.acumm(this.getPrincess()); //Si es numero de princesas que tenemos acumiladas en mayor o igual que la n entoncese esta en esta posiicon
+		//izquierda
+		
+		princessFound.acumm(this.getPrincess()); //Acumulamos princesas que haya en este nodo 
 		if(princessFound.get()>=n){
-			bool.acumm(1);
-		}		
-		this.travelLeft().findNPrincessInordenRec(origin, n, list, bool, princessFound); //llamada por la izquierda
-		this.travelRight().findNPrincessInordenRec(origin, n, list, bool, princessFound);
+			bool.doTrue(); //Se ha encontrado la princesa
+			return;
+		}
+		
+		if(!this.travelLeft().isEmpty() && !bool.getBoolValue()){
+			list.add('L');
+			this.travelLeft().findNPrincessInordenRec(origin, n, list, bool, princessFound); //llamada por la izquierda
+		}
+		
+		//derecha
+		if(!this.travelRight().isEmpty() && !bool.getBoolValue()){
+			list.add('R');
+			this.travelRight().findNPrincessInordenRec(origin, n, list, bool, princessFound);
+		}
+		
 	}
 
 	private long getPrincess() {
-		int con=0;
+		long con=0;
 		for(Entity i : this.content){
 			if(i.getType()==Entity.PRINCESS){
-				con++;
+				con = i.getCount();
 			}
 		}
 		return con;
