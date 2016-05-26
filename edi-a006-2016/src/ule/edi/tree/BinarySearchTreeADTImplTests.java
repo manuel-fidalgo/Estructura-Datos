@@ -129,9 +129,19 @@ public class BinarySearchTreeADTImplTests {
 		T4321.parentChildPairs(lS);
 		assertEquals("[(4,3), (3,2), (2,1)]",lS.toString());
 	}
+	
 	@Test (expected = NoSuchElementException.class)
 	public void test05(){
 		T1234.getContentWithPath("0");
+	}
+	
+	@Test
+	public void test06(){
+		System.out.println(TE.render());
+		assertEquals(TE.countEmpty(),1);
+		TE.insert(1,2,3,4,5,6,7,8,9,7,6,5);
+		System.out.println(TE.render());
+		assertEquals(TE.countEmpty(),10);
 	}
 	
 

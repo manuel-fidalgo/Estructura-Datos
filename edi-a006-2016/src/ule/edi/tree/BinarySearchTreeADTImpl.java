@@ -280,22 +280,22 @@ AbstractBinaryTreeADT<T> {
 	 */
 	
 	public long countEmpty() {
-		if(this.isEmpty()) return 1;
+		AbstractBinaryTreeADT<T> tree = (AbstractBinaryTreeADT<T>)this;
+		int[] acum = new int[1]; acum[0] = 0;
 		
-		int[] acum = new int[1];
-		acum[0]=0;
+		countEmptyRec(acum, tree);
 		
-		this.countEmptyRec(acum,this.leftSubtree);
-		this.countEmptyRec(acum,this.rightSubtree);
 		return acum[0];
 	}
 
 	public void countEmptyRec(int[] acum, AbstractBinaryTreeADT<T> tree){
-		if(this.isEmpty()){
+		if(tree.isEmpty()){
 			acum[0]++;
 		}else{
-			if(tree.rightSubtree!=null) countEmptyRec(acum, tree.rightSubtree);
-			if(tree.leftSubtree!=null) countEmptyRec(acum, tree.leftSubtree);
+			if(tree.leftSubtree!=null)
+				countEmptyRec(acum, tree.leftSubtree);
+			if(tree.rightSubtree!=null)
+				countEmptyRec(acum, tree.rightSubtree);
 		}
 	}
 
