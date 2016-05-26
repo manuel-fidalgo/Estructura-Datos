@@ -357,22 +357,30 @@ public class World extends AbstractBinaryTreeADT<LinkedList<Entity>> {
 	 */
 
 	public long findFirstDragonInBreadthOrder() {
-		int index = 0;
-		_int ndrag;
+		int count = 0;
 		ArrayList<World> queue = new ArrayList<World>();
 		queue.add(this);
-		while(index<queue.size()){
-			World w = queue.get(0); index++;
-
-			if(w.hasDragon())
-				return index-1;
-
-			if(w.travelLeft()!=null)
-				queue.add(w.travelLeft());
-			if(w.travelRight()!=null) 
-				queue.add(w.travelRight());
+		
+		while(!queue.isEmpty()){
+			
+			World w = queue.get(0); 
+			queue.remove(0);
+			
+			if(!w.isEmpty()){
+				if(w.hasDragon())
+					return count;
+				
+				count++; //Aumentamos el contador de nodos no vacios
+	
+				if(w.travelLeft()!=null)
+					queue.add(w.travelLeft());
+				
+				if(w.travelRight()!=null) 
+					queue.add(w.travelRight());
+			}
 		}
-		return 0;
+		//No se ha encontrado ningun dragon, se han encolado todos los elementos del arbol
+		return count;
 	}
 
 	private boolean hasDragon() {

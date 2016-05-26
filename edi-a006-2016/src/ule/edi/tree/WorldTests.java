@@ -89,6 +89,10 @@ public class WorldTests {
 		assertEquals(w.countAtLevel(Entity.PRINCESS, 5),6);
 		assertEquals(w.countAtLevel(Entity.DRAGON, 5),1);
 		assertEquals(w.countAtLevel(Entity.DRAGON, 6),0);
+		System.out.println("Mundo02->\n"+w.render());
+		assertEquals(w.findFirstDragonInBreadthOrder(),7);
+		w.insert("RR", new Entity(Entity.DRAGON));
+		assertEquals(w.findFirstDragonInBreadthOrder(),4);
 		
 		
 	}
