@@ -323,6 +323,7 @@ public class World extends AbstractBinaryTreeADT<LinkedList<Entity>> {
 	 * @return <code>true</code> si la encontró.
 	 */
 	/*ver si la princesa enesima esta en la posicion dada por la ruta*/
+	/**/
 	public boolean findNPrincessInorden(long n, LinkedList<Character> rx) {
 		_int bool = new _int(0);
 		_int princessFound = new _int(0);
