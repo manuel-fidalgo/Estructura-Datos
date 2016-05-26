@@ -146,11 +146,15 @@ public class World extends AbstractBinaryTreeADT<LinkedList<Entity>> {
 			this.addEntity(e);
 			return;
 		}
-		if(this.content==null) this.content = new LinkedList<Entity>();
-		if(this.travelLeft()==null) this.setLeft(new World());
-		if(this.travelRight()==null) this.setRight(new World());
-
-		if(this.content.isEmpty()) this.content.add(new Entity(Entity.FOREST));
+		
+		if(this.content==null) 
+			this.content = new LinkedList<Entity>();
+		if(this.travelLeft()==null) 
+			this.setLeft(new World());
+		if(this.travelRight()==null) 
+			this.setRight(new World());
+		if(this.content.isEmpty()) 
+			this.content.add(new Entity(Entity.FOREST));
 
 		c = sb.charAt(0);
 		sb.deleteCharAt(0);
@@ -352,23 +356,24 @@ public class World extends AbstractBinaryTreeADT<LinkedList<Entity>> {
 	private void findNPrincessInordenRec(World origin, long n, LinkedList<Character> list, _int bool, _int princessFound) {
 		
 		
+		if(!this.travelLeft().isEmpty() && !bool.getBoolValue()){
+			list.add('L');
+			this.travelLeft().findNPrincessInordenRec(origin, n, list, bool, princessFound); //llamada por la izquierda
+		}
+		
 		princessFound.acumm(this.getPrincess()); //Acumulamos princesas que haya en este nodo 
 		if(princessFound.get()>=n){
 			bool.doTrue(); //Se ha encontrado la princesa
-			return;
 		}else{
 			if(!list.isEmpty()) list.removeLast();
-		}
-		
-		if(!this.travelLeft().isEmpty() &&!bool.getBoolValue()){
-			list.add('L');
-			this.travelLeft().findNPrincessInordenRec(origin, n, list, bool, princessFound); //llamada por la izquierda
 		}
 		
 		if(!this.travelRight().isEmpty() && !bool.getBoolValue()){
 			list.add('R');
 			this.travelRight().findNPrincessInordenRec(origin, n, list, bool, princessFound);
 		}
+		
+		
 		
 	}
 

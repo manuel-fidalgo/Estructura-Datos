@@ -114,15 +114,14 @@ public class WorldTests {
 		System.out.println("Mundo03->\n"+w.render());
 		
 		list = new LinkedList<Character>();
-		System.out.println(w.findNPrincessInorden(1, list)+"->"+list+"  [L]");
+		System.out.println(w.findNPrincessInorden(1, list)+"->"+list+"  [L, L]");
 		list = new LinkedList<Character>();
 		System.out.println(w.findNPrincessInorden(2, list)+"->"+list+"  [L]");
 		list = new LinkedList<Character>();
-		System.out.println(w.findNPrincessInorden(3, list)+"->"+list+"  [L, L]");
+		System.out.println(w.findNPrincessInorden(3, list)+"->"+list+"  [L]");
 		list = new LinkedList<Character>();
 		System.out.println(w.findNPrincessInorden(4, list)+"->"+list+"  [R]");
 		list = new LinkedList<Character>();
-		System.out.println(w.findNPrincessInorden(5, list)+"->"+list);
 		
 		w = World.createEmptyWorld();
 		list = new LinkedList<>();
