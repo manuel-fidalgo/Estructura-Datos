@@ -125,10 +125,10 @@ public class BinarySearchTreeADTImplTests {
 	public void test04(){
 
 		T1234.parentChildPairs(lS);
-		System.out.println(lS);
+		//System.out.println(lS);
 		lS = new LinkedList<String>();
 		T4321.parentChildPairs(lS);
-		System.out.println(lS);
+		//System.out.println(lS);
 	}
 	
 

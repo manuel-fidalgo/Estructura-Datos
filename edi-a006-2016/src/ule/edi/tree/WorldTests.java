@@ -1,6 +1,7 @@
 package ule.edi.tree;
 
 import java.util.LinkedList;
+import java.util.Random;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -25,9 +26,23 @@ public class WorldTests {
 	public void testInsertRender() {
 		
 		w.insert("LL", Entity.warriors(2));		
+		System.out.println("MundoTest->");
+		System.out.println(w.render());	
+			
+	}
+	@Test
+	public void test00(){
+		w = World.createEmptyWorld();
+		w.insert("", new Entity(Entity.CASTLE));
+		w.insert("", new Entity(Entity.CASTLE));
+		w.insert("R", new Entity(Entity.FOREST));
+		w.insert("LLLL", new Entity(Entity.DRAGON));
+		w.insert("R", new Entity(Entity.PRINCESS));
+		w.insert("L", new Entity(Entity.WARRIOR));
 		
-		System.out.println(w);
-		System.out.println(w.render());		
+		System.out.println("Mundo00->");
+		System.out.println(w.render());
+		
 	}
 	
 }

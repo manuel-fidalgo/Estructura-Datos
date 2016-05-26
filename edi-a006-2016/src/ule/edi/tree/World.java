@@ -49,11 +49,13 @@ public class World extends AbstractBinaryTreeADT<LinkedList<Entity>> {
 	protected World travelLeft() {
 
 		return (World) leftSubtree;
+
 	}
 
 	private void setLeft(World left) {
 
 		this.leftSubtree = left;
+
 	}
 
 	/**
@@ -137,31 +139,55 @@ public class World extends AbstractBinaryTreeADT<LinkedList<Entity>> {
 	}
 
 	private void insertRec(StringBuilder sb, Entity e) {
-		char first;
-		if(sb.length()==0){  //Estamos en el nodo a insertar
-			this.content.add(e);
-		}else{
-			first = sb.charAt(0);
-			sb.deleteCharAt(0);
-			if(first=='L'){
-				if(this.travelLeft()==null){
-					this.setLeft(new World());
-					this.travelLeft().content = new LinkedList<Entity>();
-					this.travelLeft().content.add(new Entity(Entity.FOREST));
-				}
-				this.travelLeft().insertRec(sb,e);
-			}
-			if(first=='R'){
-				if(this.travelRight()==null) {
-					this.setRight(new World());
-					this.travelRight().content = new LinkedList<Entity>();
-					this.travelRight().content.add(new Entity(Entity.FOREST));
-				}
-				this.travelRight().insertRec(sb,e);
-				
-			}
+		char c;
+		World w;
+		if(sb.length()==0){
+			this.addEntity(e);
+			return;
+		}
+		if(this.content==null) this.content = new LinkedList<Entity>();
+		if(this.travelLeft()==null) this.setLeft(new World());
+		if(this.travelRight()==null) this.setRight(new World());
+		
+		if(this.content.isEmpty()) this.content.add(new Entity(Entity.FOREST));
+		
+		c = sb.charAt(0);
+		sb.deleteCharAt(0);
+		if(c=='R'){
+			this.travelRight().insertRec(sb, e);
+		}
+		if(c=='L'){
+			this.travelLeft().insertRec(sb, e);
 		}
 	}
+
+	/**
+	 * Si o tiene lista de la crea.
+	 * Itera sobre la lista de entitidades y en caso de que haya alguna entidad del
+	 * mismo tipo que la que vamos a agnadir aumentamos su cardinal.
+	 * @param e entidad a agnadir
+	 */
+	private void addEntity(Entity e) {
+		if(this.content==null){
+			this.content = new LinkedList<Entity>();
+		}
+		if(this.travelLeft()==null){
+			this.setLeft(new World());
+		}
+		if(this.travelRight()==null){
+			this.setRight(new World());
+		}
+
+		List<Entity> l = this.content;
+		for (Entity entity : l) {
+			if(e.getType()==entity.getType()){
+				entity.setCount(entity.getCount()+e.getCount()); //busca la entidad a agnadir y
+				return;
+			}
+		}
+		l.add(e); // caso que no haya ninguna del mismo tipo
+	}
+
 
 	/**
 	 * Indica cuántos castillos hay a no más de la distancia indicada.
@@ -191,8 +217,8 @@ public class World extends AbstractBinaryTreeADT<LinkedList<Entity>> {
 	 */
 	public long countCastlesCloserThan(long distance) {
 
-		// TODO Implementar el método
 		return 0;
+
 	}
 
 	/**
@@ -204,7 +230,6 @@ public class World extends AbstractBinaryTreeADT<LinkedList<Entity>> {
 	 */
 	public long countAtLevel(int type, int n) {
 
-		// TODO Implementar el método	
 		return 0;
 	}
 
@@ -241,7 +266,6 @@ public class World extends AbstractBinaryTreeADT<LinkedList<Entity>> {
 	 */
 	public boolean findNPrincessInorden(long n, LinkedList<Character> rx) {
 
-		// TODO Implementar el método
 		return false;
 	}
 
@@ -271,7 +295,6 @@ public class World extends AbstractBinaryTreeADT<LinkedList<Entity>> {
 	 */
 	public long findFirstDragonInBreadthOrder() {
 
-		//	TODO Implementar el método		
 		return 0;
 	}
 
