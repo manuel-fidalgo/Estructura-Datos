@@ -1,11 +1,8 @@
 package ule.edi.tree;
 
 import java.util.Collection;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Queue;
-
 import ule.edi.EmptyCollectionException;
 
 /**
@@ -85,6 +82,7 @@ AbstractBinaryTreeADT<T> {
 	 * 
 	 * @param elements elementos a insertar.
 	 */
+	@SuppressWarnings("unchecked")
 	public void insert(T ... elements) {
 
 		//	O todos o ninguno; si alguno es 'null', ni siquiera se comienza a insertar
@@ -159,6 +157,7 @@ AbstractBinaryTreeADT<T> {
 	 * 
 	 * @param elements valores a eliminar.
 	 */
+	@SuppressWarnings("unchecked")
 	public void withdraw(T ... elements) {
 		for (T e : elements) {
 			withdraw(e);
@@ -279,17 +278,25 @@ AbstractBinaryTreeADT<T> {
 	 * 
 	 * @return nÃºmero de Ã¡rboles vacÃ­os.
 	 */
+	
 	public long countEmpty() {
-		return countEmptyRec(this.leftSubtree)+countEmptyRec(this.leftSubtree);
+		if(this.isEmpty()) return 1;
+		
+		int[] acum = new int[1];
+		acum[0]=0;
+		
+		this.countEmptyRec(acum,this.leftSubtree);
+		this.countEmptyRec(acum,this.rightSubtree);
+		return acum[0];
 	}
 
-	public long countEmptyRec(AbstractBinaryTreeADT<T> subtree){
-		if(subtree.isEmpty()){
-			return 1;
+	public void countEmptyRec(int[] acum, AbstractBinaryTreeADT<T> tree){
+		if(this.isEmpty()){
+			acum[0]++;
 		}else{
-			return countEmptyRec(subtree.rightSubtree)+countEmptyRec(subtree.leftSubtree);
+			if(tree.rightSubtree!=null) countEmptyRec(acum, tree.rightSubtree);
+			if(tree.leftSubtree!=null) countEmptyRec(acum, tree.leftSubtree);
 		}
-
 	}
 
 	/**
@@ -334,7 +341,7 @@ AbstractBinaryTreeADT<T> {
 
 	}
 
-	/*
+	/**
 	 * Acumula en pre-orden, una lista con los pares 'padre-hijo' en este Ã¡rbol.
 	 * 
 	 * Por ejemplo, sea un Ã¡rbol "A":
@@ -376,8 +383,8 @@ AbstractBinaryTreeADT<T> {
 		}
 	}
 	public String createString(BinarySearchTreeADTImpl<T> a, BinarySearchTreeADTImpl<T> b){
-		
-			return "("+a.content.toString()+","+b.content.toString()+")";
+
+		return "("+a.content.toString()+","+b.content.toString()+")";
 	}
 
 	/**
@@ -414,30 +421,32 @@ AbstractBinaryTreeADT<T> {
 	 */
 
 	public T getContentWithPath(String path) {
-		//Habria que comprobar primerp que la cadena tiene el formato correcto
 		return getContentRec(new StringBuffer(path));
 	}
 
-	private T getContentRec(StringBuffer sb) {
+	private T getContentRec(StringBuffer sb) throws NoSuchElementException, IllegalArgumentException {
 
 		char us;
 
 		if(sb.length()==0){
+			if(this.content==null) throw new NoSuchElementException();
 			return this.content;
 		}else{
 			us = sb.charAt(0);
 			sb.deleteCharAt(0);
-			try{
 				if(us == '0'){
-					return this.getLeftBST().getContentRec(sb);
+					if(this.getLeftBST()==null) 
+						throw new NoSuchElementException();
+					else
+						return this.getLeftBST().getContentRec(sb);
 				}else if(us == '1'){
-					return this.getRightBST().getContentRec(sb);
+					if(this.getLeftBST()==null) 
+						throw new NoSuchElementException();
+					else
+						return this.getRightBST().getContentRec(sb);
 				}else{
-					throw new IllegalArgumentException(sb.toString()+"Error in characeter:"+us);
+					throw new IllegalArgumentException();
 				}
-			}catch(NullPointerException e){
-				throw new NoSuchElementException();
-			}
 		}
 	}	
 }

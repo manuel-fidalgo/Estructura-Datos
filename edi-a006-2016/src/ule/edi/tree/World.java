@@ -163,7 +163,6 @@ public class World extends AbstractBinaryTreeADT<LinkedList<Entity>> {
 	}
 
 	/**
-	 * Si o tiene lista de la crea.
 	 * Itera sobre la lista de entitidades y en caso de que haya alguna entidad del
 	 * mismo tipo que la que vamos a agnadir aumentamos su cardinal.
 	 * @param e entidad a agnadir
@@ -262,7 +261,7 @@ public class World extends AbstractBinaryTreeADT<LinkedList<Entity>> {
 				}
 			}
 		}catch(NullPointerException e){
-			//NODO vacio
+
 		}
 	}
 
@@ -324,11 +323,14 @@ public class World extends AbstractBinaryTreeADT<LinkedList<Entity>> {
 	 * @return <code>true</code> si la encontró.
 	 */
 	public boolean findNPrincessInorden(long n, LinkedList<Character> rx) {
-		StringBuffer sb = new StringBuffer();
-		for(Character c : rx){
-			sb.append(c);
-		}
-		return false;
+		_int bool = new _int(0);
+		_int princessFound = new _int(0);
+		findNPrincessInordenRec(n,rx,bool,princessFound);
+		return bool.get()!=0 ?  true : false;
+	}
+
+	private void findNPrincessInordenRec(long n, LinkedList<Character> rx, _int bool,_int princessFound) {
+		bool.acumm(1);
 	}
 
 	/**
@@ -357,24 +359,25 @@ public class World extends AbstractBinaryTreeADT<LinkedList<Entity>> {
 	 */
 
 	public long findFirstDragonInBreadthOrder() {
+
 		int count = 0;
 		ArrayList<World> queue = new ArrayList<World>();
 		queue.add(this);
-		
+
 		while(!queue.isEmpty()){
-			
+
 			World w = queue.get(0); 
 			queue.remove(0);
-			
+
 			if(!w.isEmpty()){
 				if(w.hasDragon())
 					return count;
-				
+
 				count++; //Aumentamos el contador de nodos no vacios
-	
+
 				if(w.travelLeft()!=null)
 					queue.add(w.travelLeft());
-				
+
 				if(w.travelRight()!=null) 
 					queue.add(w.travelRight());
 			}

@@ -100,7 +100,6 @@ public class BinarySearchTreeADTImplTests {
 	
 	@Test
 	public void test00(){
-		assertNull(T1234.getContentWithPath("0"));
 		StringBuffer sb = new StringBuffer();
 		for (int i = 0; i < 3; i++) {
 			sb.append("1");
@@ -129,6 +128,10 @@ public class BinarySearchTreeADTImplTests {
 		lS = new LinkedList<String>();
 		T4321.parentChildPairs(lS);
 		assertEquals("[(4,3), (3,2), (2,1)]",lS.toString());
+	}
+	@Test (expected = NoSuchElementException.class)
+	public void test05(){
+		T1234.getContentWithPath("0");
 	}
 	
 
