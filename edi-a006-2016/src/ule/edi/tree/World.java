@@ -244,23 +244,14 @@ public class World extends AbstractBinaryTreeADT<LinkedList<Entity>> {
 		public long get(){
 			return this.n;
 		}
-		public void inc(){
-			this.n++;
-		}
 		public void acumm(long n){
 			this.n = this.n + n;
 		}
 		public void doTrue(){
 			this.n = 1;
 		}
-		public void doFalse(){
-			this.n = 0;
-		}
 		public boolean getBoolValue(){
 			return this.n==1 ? true : false;
-		}
-		public String toString(){
-			return Long.toString(this.n);
 		}
 	}
 	/**
@@ -347,9 +338,6 @@ public class World extends AbstractBinaryTreeADT<LinkedList<Entity>> {
 		_int bool = new _int(0);
 		_int princessFound = new _int(0);
 		findNPrincessInordenRec(this,n,rx,bool,princessFound);
-		if(!bool.getBoolValue()){
-			rx = new LinkedList<>();
-		}
 		return bool.getBoolValue();
 	}
 

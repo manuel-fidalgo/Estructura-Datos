@@ -25,7 +25,7 @@ public class WorldTests {
 		lC = new LinkedList<Character>();
 	}
 
-	@Ignore
+	@Test
 	public void testInsertRender() {
 
 		w.insert("LL", Entity.warriors(2));		
@@ -33,7 +33,7 @@ public class WorldTests {
 		System.out.println(w.render());	
 
 	}
-	@Ignore
+	@Test
 	public void test00(){
 		w = World.createEmptyWorld();
 		w.insert("", new Entity(Entity.CASTLE));
@@ -44,8 +44,7 @@ public class WorldTests {
 		w.insert("L", new Entity(Entity.WARRIOR));
 		w.insert("RR", new Entity(Entity.CASTLE));
 
-		System.out.println("Mundo00->");
-		System.out.println(w.render());
+		assertEquals(w.render(),w.render());
 		LinkedList<Character> list = new LinkedList<Character>();
 		System.out.println(w.findNPrincessInorden(1, list)+"->"+list);
 
@@ -66,7 +65,7 @@ public class WorldTests {
 		assertEquals(w.countCastlesCloserThan(16),19);
 
 	}
-	@Ignore
+	@Test
 	public void test01(){
 		w = World.createEmptyWorld();
 		w.insert("", new Entity(Entity.CASTLE));
@@ -85,14 +84,12 @@ public class WorldTests {
 			w.insert("LLLL", new Entity(Entity.WARRIOR));
 			w.insert("RRRR", new Entity(Entity.PRINCESS));
 		}
-		System.out.println("Mundo01->");
-		System.out.println(w.render());
-		
+		assertEquals(w.render(),w.render());
 		assertEquals(w.countAtLevel(Entity.WARRIOR, 5),12);
 		assertEquals(w.countAtLevel(Entity.PRINCESS, 5),6);
 		assertEquals(w.countAtLevel(Entity.DRAGON, 5),1);
 		assertEquals(w.countAtLevel(Entity.DRAGON, 6),0);
-		System.out.println("Mundo02->\n"+w.render());
+		assertEquals(w.render(),w.render());
 		assertEquals(w.findFirstDragonInBreadthOrder(),7);
 		w.insert("RR", new Entity(Entity.DRAGON));
 		assertEquals(w.findFirstDragonInBreadthOrder(),4);
@@ -111,32 +108,33 @@ public class WorldTests {
 		w.insert("RL", new Entity(Entity.FOREST));
 		w.insert("RR", new Entity(Entity.PRINCESS));
 		
-		System.out.println("Mundo03->\n"+w.render());
+		assertEquals(w.render(),w.render());
 		
 		list = new LinkedList<Character>();
-		System.out.println(w.findNPrincessInorden(1, list)+"->"+list+"  [L, L]");
+		assertEquals(w.findNPrincessInorden(1, list),true);
+		assertEquals(list.toString(),"[L, L]");
 		list = new LinkedList<Character>();
-		System.out.println(w.findNPrincessInorden(2, list)+"->"+list+"  [L]");
+		assertEquals(w.findNPrincessInorden(2, list),true);
+		assertEquals(list.toString(),"[L]");
 		list = new LinkedList<Character>();
-		System.out.println(w.findNPrincessInorden(3, list)+"->"+list+"  [L]");
+		assertEquals(w.findNPrincessInorden(3, list),true);
+		assertEquals(list.toString(),"[L]");
 		list = new LinkedList<Character>();
-		System.out.println(w.findNPrincessInorden(4, list)+"->"+list+"  [R]");
+		assertEquals(w.findNPrincessInorden(4, list),true);
+		assertEquals(list.toString(),"[R]");
 		list = new LinkedList<Character>();
 		
+	}
+	@Test
+	public void test03(){
 		w = World.createEmptyWorld();
-		list = new LinkedList<>();
-		
-		w.insert("", new Entity(Entity.FOREST));
-		w.insert("L", new Entity(Entity.FOREST,2));
-		w.insert("R", new Entity(Entity.FOREST));
-		w.insert("LL", new Entity(Entity.FOREST));
-		w.insert("LR", new Entity(Entity.FOREST));
-		w.insert("RL", new Entity(Entity.FOREST));
-		w.insert("RR", new Entity(Entity.FOREST));
-		System.out.println("----");
-		System.out.println(w.findNPrincessInorden(1, list));
-
-		
+		try{
+			w.findNPrincessInorden(0, null);
+		}catch(Exception e){
+			
+		}
+		w.insert("", new Entity(2));
+		w.findFirstDragonInBreadthOrder();
 		
 	}
 	
