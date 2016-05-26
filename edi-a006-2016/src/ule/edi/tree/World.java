@@ -1,5 +1,6 @@
 package ule.edi.tree;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
@@ -148,9 +149,9 @@ public class World extends AbstractBinaryTreeADT<LinkedList<Entity>> {
 		if(this.content==null) this.content = new LinkedList<Entity>();
 		if(this.travelLeft()==null) this.setLeft(new World());
 		if(this.travelRight()==null) this.setRight(new World());
-		
+
 		if(this.content.isEmpty()) this.content.add(new Entity(Entity.FOREST));
-		
+
 		c = sb.charAt(0);
 		sb.deleteCharAt(0);
 		if(c=='R'){
@@ -231,7 +232,7 @@ public class World extends AbstractBinaryTreeADT<LinkedList<Entity>> {
 			if(this.travelRight()!=null) this.travelRight().countCastlesCloserThanRec(total_distance, current_distance, acum);
 		}
 	}
-	
+
 	static class _int{
 		public long n;
 		_int(int n){
@@ -254,12 +255,12 @@ public class World extends AbstractBinaryTreeADT<LinkedList<Entity>> {
 	 */
 	private void getEntCount(_int acum,int type) {
 		try{
-		for(Entity en : this.content){
-			if(en.getType()==type){//Sacamos el cardinal de la las entidad que se le ha pasado
-				acum.acumm(en.getCount());
-				return;
+			for(Entity en : this.content){
+				if(en.getType()==type){//Sacamos el cardinal de la las entidad que se le ha pasado
+					acum.acumm(en.getCount());
+					return;
+				}
 			}
-		}
 		}catch(NullPointerException e){
 			//NODO vacio
 		}
@@ -277,16 +278,15 @@ public class World extends AbstractBinaryTreeADT<LinkedList<Entity>> {
 		_int acum = new _int(0);
 		countAtLevelRec(type,n,1,acum);
 		return acum.get();
-		
+
 	}
 
 	private void countAtLevelRec(int type, int level_final, int level_current, _int acum) {
-		
+
 		if(level_current==level_final){
 			getEntCount(acum,type);
 		}else{
 			level_current++;
-			//LLamda por la derecha y por la izquierda
 			if(this.travelLeft()!=null) this.travelLeft().countAtLevelRec(type, level_final, level_current, acum);
 			if(this.travelLeft()!=null) this.travelRight().countAtLevelRec(type, level_final, level_current, acum);
 		}
@@ -324,7 +324,10 @@ public class World extends AbstractBinaryTreeADT<LinkedList<Entity>> {
 	 * @return <code>true</code> si la encontró.
 	 */
 	public boolean findNPrincessInorden(long n, LinkedList<Character> rx) {
-
+		StringBuffer sb = new StringBuffer();
+		for(Character c : rx){
+			sb.append(c);
+		}
 		return false;
 	}
 
@@ -349,12 +352,36 @@ public class World extends AbstractBinaryTreeADT<LinkedList<Entity>> {
 	 * 
 	 * Si no hubiera ningún dragón, devolverá el número de nodos no vacíos
 	 * en el mundo.
-	 * 
+	 * Para el recorrido en anchura simularemos una cola con un indice
 	 * @return el número de nodos no vacíos que ha recorrido antes del dragón.
 	 */
-	public long findFirstDragonInBreadthOrder() {
 
+	public long findFirstDragonInBreadthOrder() {
+		int index = 0;
+		_int ndrag;
+		ArrayList<World> queue = new ArrayList<World>();
+		queue.add(this);
+		while(index<queue.size()){
+			World w = queue.get(0); index++;
+
+			if(w.hasDragon())
+				return index-1;
+
+			if(w.travelLeft()!=null)
+				queue.add(w.travelLeft());
+			if(w.travelRight()!=null) 
+				queue.add(w.travelRight());
+		}
 		return 0;
+	}
+
+	private boolean hasDragon() {
+		for(Entity i : this.content){
+			if(i.getType()==Entity.DRAGON){
+				return true;
+			}
+		}
+		return false;
 	}
 
 }
