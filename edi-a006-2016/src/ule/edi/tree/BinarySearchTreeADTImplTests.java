@@ -123,12 +123,12 @@ public class BinarySearchTreeADTImplTests {
 	}
 	@Test
 	public void test04(){
-
+		//LS es el buffer que ha declarado ella como atributo de clase
 		T1234.parentChildPairs(lS);
-		//System.out.println(lS);
+		assertEquals("[(1,2), (2,3), (3,4)]",lS.toString());
 		lS = new LinkedList<String>();
 		T4321.parentChildPairs(lS);
-		//System.out.println(lS);
+		assertEquals("[(4,3), (3,2), (2,1)]",lS.toString());
 	}
 	
 

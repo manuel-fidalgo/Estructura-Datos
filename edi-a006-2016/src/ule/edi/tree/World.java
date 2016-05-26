@@ -216,9 +216,49 @@ public class World extends AbstractBinaryTreeADT<LinkedList<Entity>> {
 	 * @return número de castillos a no más de esa distancia.
 	 */
 	public long countCastlesCloserThan(long distance) {
+		_int acum = new _int(0);
+		countCastlesCloserThanRec(distance,0,acum);
+		return acum.get();
 
-		return 0;
+	}
 
+	private void countCastlesCloserThanRec(long total_distance,long current_distance, _int acum) {
+		getCastles(acum);
+		if(total_distance==current_distance){
+			return;
+		}else{
+			current_distance++;
+			if(this.travelLeft()!=null) this.travelLeft().countCastlesCloserThanRec(total_distance, current_distance, acum);
+			if(this.travelRight()!=null) this.travelRight().countCastlesCloserThanRec(total_distance, current_distance, acum);
+		}
+	}
+	static class _int{
+		public long n;
+		_int(int n){
+			this.n = n;
+		}
+		public long get(){
+			return this.n;
+		}
+		public void inc(){
+			this.n++;
+		}
+		public void acumm(long n){
+			this.n = this.n + n;
+		}
+	}
+
+	private void getCastles(_int acum) {
+		try{
+		for(Entity en : this.content){
+			if(en.getType()==Entity.CASTLE){//Sacamos el cardinal de la las entidad castillo
+				acum.acumm(en.getCount());
+				return;
+			}
+		}
+		}catch(NullPointerException e){
+			//Se supone que se ha accedido a un nodo vacio
+		}
 	}
 
 	/**
