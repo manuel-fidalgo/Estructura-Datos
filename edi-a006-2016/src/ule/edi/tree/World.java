@@ -219,11 +219,10 @@ public class World extends AbstractBinaryTreeADT<LinkedList<Entity>> {
 		_int acum = new _int(0);
 		countCastlesCloserThanRec(distance,0,acum);
 		return acum.get();
-
 	}
 
 	private void countCastlesCloserThanRec(long total_distance,long current_distance, _int acum) {
-		getCastles(acum);
+		getEntCount(acum,Entity.CASTLE);
 		if(total_distance==current_distance){
 			return;
 		}else{
@@ -232,6 +231,7 @@ public class World extends AbstractBinaryTreeADT<LinkedList<Entity>> {
 			if(this.travelRight()!=null) this.travelRight().countCastlesCloserThanRec(total_distance, current_distance, acum);
 		}
 	}
+	
 	static class _int{
 		public long n;
 		_int(int n){
@@ -247,17 +247,21 @@ public class World extends AbstractBinaryTreeADT<LinkedList<Entity>> {
 			this.n = this.n + n;
 		}
 	}
-
-	private void getCastles(_int acum) {
+	/**
+	 * 
+	 * @param acum objeto en el que devolvera la cardinalidar
+	 * @param type typo de la entidad sobre la que se quiere saber la cardinalidad
+	 */
+	private void getEntCount(_int acum,int type) {
 		try{
 		for(Entity en : this.content){
-			if(en.getType()==Entity.CASTLE){//Sacamos el cardinal de la las entidad castillo
+			if(en.getType()==type){//Sacamos el cardinal de la las entidad que se le ha pasado
 				acum.acumm(en.getCount());
 				return;
 			}
 		}
 		}catch(NullPointerException e){
-			//Se supone que se ha accedido a un nodo vacio
+			//NODO vacio
 		}
 	}
 
@@ -270,7 +274,22 @@ public class World extends AbstractBinaryTreeADT<LinkedList<Entity>> {
 	 */
 	public long countAtLevel(int type, int n) {
 
-		return 0;
+		_int acum = new _int(0);
+		countAtLevelRec(type,n,1,acum);
+		return acum.get();
+		
+	}
+
+	private void countAtLevelRec(int type, int level_final, int level_current, _int acum) {
+		
+		if(level_current==level_final){
+			getEntCount(acum,type);
+		}else{
+			level_current++;
+			//LLamda por la derecha y por la izquierda
+			if(this.travelLeft()!=null) this.travelLeft().countAtLevelRec(type, level_final, level_current, acum);
+			if(this.travelLeft()!=null) this.travelRight().countAtLevelRec(type, level_final, level_current, acum);
+		}
 	}
 
 	/**
