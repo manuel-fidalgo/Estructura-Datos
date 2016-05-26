@@ -120,7 +120,7 @@ public class WorldTests {
 		list = new LinkedList<Character>();
 		System.out.println(w.findNPrincessInorden(3, list)+"->"+list+"  [L, L]");
 		list = new LinkedList<Character>();
-		System.out.println(w.findNPrincessInorden(4, list)+"->"+list+"  [L, L, R, R]");
+		System.out.println(w.findNPrincessInorden(4, list)+"->"+list+"  [R]");
 		list = new LinkedList<Character>();
 		System.out.println(w.findNPrincessInorden(5, list)+"->"+list);
 		

@@ -350,20 +350,21 @@ public class World extends AbstractBinaryTreeADT<LinkedList<Entity>> {
 	}
 
 	private void findNPrincessInordenRec(World origin, long n, LinkedList<Character> list, _int bool, _int princessFound) {
-		//izquierda
+		
 		
 		princessFound.acumm(this.getPrincess()); //Acumulamos princesas que haya en este nodo 
 		if(princessFound.get()>=n){
 			bool.doTrue(); //Se ha encontrado la princesa
 			return;
+		}else{
+			if(!list.isEmpty()) list.removeLast();
 		}
 		
-		if(!this.travelLeft().isEmpty() && !bool.getBoolValue()){
+		if(!this.travelLeft().isEmpty() &&!bool.getBoolValue()){
 			list.add('L');
 			this.travelLeft().findNPrincessInordenRec(origin, n, list, bool, princessFound); //llamada por la izquierda
 		}
 		
-		//derecha
 		if(!this.travelRight().isEmpty() && !bool.getBoolValue()){
 			list.add('R');
 			this.travelRight().findNPrincessInordenRec(origin, n, list, bool, princessFound);
