@@ -246,6 +246,15 @@ public class World extends AbstractBinaryTreeADT<LinkedList<Entity>> {
 		public void acumm(long n){
 			this.n = this.n + n;
 		}
+		public void doTrue(){
+			this.n = 1;
+		}
+		public void doFalse(){
+			this.n = 0;
+		}
+		public boolean getBoolValue(){
+			return this.n==1 ? true : false;
+		}
 	}
 	/**
 	 * 
@@ -322,23 +331,23 @@ public class World extends AbstractBinaryTreeADT<LinkedList<Entity>> {
 	 * @param rx camino del nodo que contiene a la princesa encontrada.
 	 * @return <code>true</code> si la encontró.
 	 */
+	
 	/*ver si la princesa enesima esta en la posicion dada por la ruta*/
-	/**/
+	
 	public boolean findNPrincessInorden(long n, LinkedList<Character> rx) {
 		_int bool = new _int(0);
 		_int princessFound = new _int(0);
-		findNPrincessInordenRec(n,rx,bool,princessFound);
+		findNPrincessInordenRec(this,n,rx,bool,princessFound);
 		return bool.get()!=0 ?  true : false;
 	}
 
-	private void findNPrincessInordenRec(long n, LinkedList<Character> list, _int bool, _int princessFound) {
+	private void findNPrincessInordenRec(World origin, long n, LinkedList<Character> list, _int bool, _int princessFound) {
 		princessFound.acumm(this.getPrincess()); //Si es numero de princesas que tenemos acumiladas en mayor o igual que la n entoncese esta en esta posiicon
 		if(princessFound.get()>=n){
 			bool.acumm(1);
-		}
-		this.travelLeft().findNPrincessInordenRec(n, list, bool, princessFound); //llamada por la izquierda
-		this.travelRight().findNPrincessInordenRec(n, list, bool, princessFound);
-		
+		}		
+		this.travelLeft().findNPrincessInordenRec(origin, n, list, bool, princessFound); //llamada por la izquierda
+		this.travelRight().findNPrincessInordenRec(origin, n, list, bool, princessFound);
 	}
 
 	private long getPrincess() {
