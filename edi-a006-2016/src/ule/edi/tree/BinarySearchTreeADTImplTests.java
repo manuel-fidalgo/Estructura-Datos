@@ -7,8 +7,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
-import javax.swing.plaf.synth.SynthSpinnerUI;
-
 import org.junit.Before;
 import org.junit.Test;
 
@@ -140,10 +138,10 @@ public class BinarySearchTreeADTImplTests {
 
 	@Test
 	public void test06(){
-		System.out.println(TE.render());
+		assertEquals(TE.render(),TE.render());
 		assertEquals(TE.countEmpty(),1);
 		TE.insert(1,2,3,4,5,6,7,8,9,7,6,5);
-		System.out.println(TE.render());
+		assertEquals(TE.render(),TE.render());
 		assertEquals(TE.countEmpty(),10);
 	}
 	@Test
@@ -200,6 +198,82 @@ public class BinarySearchTreeADTImplTests {
 		} catch (EmptyCollectionException e) {
 		}
 
+	}
+	@Test
+	public void testcountEmpty(){
+		assertEquals(5, TEx.countEmpty());
+		System.out.println("=");
+		assertEquals(8, TC3.countEmpty());
+		System.out.println("=");
+		assertEquals(5, T4321.countEmpty());
+		System.out.println("=");
+		assertEquals(5, T1234.countEmpty());
+	}
+	@Test 
+	public void testOddLevelElements(){
+		assertEquals(5, TC3.countOddLevelElements());
+		assertEquals(2, T1234.countOddLevelElements());
+		assertEquals(2, T4321.countOddLevelElements());
+		assertEquals(2, TEx.countOddLevelElements());
+		assertEquals(0,TE.countOddLevelElements());
+	}
+
+	@Test
+	public void testParentChildPair(){
+		List<String> buffer = new ArrayList<String>();
+		TEx.insert(2);
+		TEx.parentChildPairs(buffer);
+
+		assertEquals("[(10,5), (5,2), (10,20), (20,30)]",buffer.toString());
+		/*buffer=new ArrayList<String>();
+		TC3.parentChildPairs(buffer);
+		assertEquals("[(5,2), (2,1), ()]");*/
+	}
+
+	@Test
+	public void testGetContentWithPath(){
+		Integer numero=3;
+		assertEquals(numero, TC3.getContentWithPath("01"));
+
+		numero=4;
+		assertEquals(numero, T4321.getContentWithPath(""));
+
+		numero=3;
+		assertEquals(numero, T4321.getContentWithPath("0"));
+
+		numero=1;
+		assertEquals(numero, T4321.getContentWithPath("000"));
+
+		numero=7;
+		assertEquals(numero, TC3.getContentWithPath("10"));
+
+	}
+
+	@Test (expected = IllegalArgumentException.class)
+	public void testgetContentWithPathException_1() throws IllegalArgumentException{
+		TEx.getContentWithPath("A53");
+	}
+	@Test
+	public void testFinal(){
+		TE.insert(1,2,3,4,5,6,7,8,6);
+		for (int i = 0; i < 7; i++) {
+			try {
+				TE.withdraw(TE.findMax());
+			} catch (EmptyCollectionException e) {
+				e.printStackTrace();
+			}
+		}
+		try{
+		TE.withdraw(1,2,3,4,5,6,7,6);
+		Integer g = null;
+			TE.withdraw(g);
+		}catch(Exception e){
+
+		}
+		TE = new BinarySearchTreeADTImpl<>();
+		List<String> b = new LinkedList<String>();
+		TE.parentChildPairs(b);
+		System.out.println(b);
 
 	}
 

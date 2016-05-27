@@ -292,9 +292,9 @@ AbstractBinaryTreeADT<T> {
 		if(tree.isEmpty()){
 			acum[0]++;
 		}else{
-			if(tree.leftSubtree!=null)
+		//	if(tree.leftSubtree!=null)
 				countEmptyRec(acum, tree.leftSubtree);
-			if(tree.rightSubtree!=null)
+		//	if(tree.rightSubtree!=null)
 				countEmptyRec(acum, tree.rightSubtree);
 		}
 	}
@@ -368,10 +368,10 @@ AbstractBinaryTreeADT<T> {
 	 */
 
 	public void parentChildPairs(List<String> buffer) {
+		
 		if(this.content==null){
 			return;
 		}
-
 		if(this.getLeftBST().content != null){
 			buffer.add(createString(this, this.getLeftBST()));
 			this.getLeftBST().parentChildPairs(buffer);//LLamada por la izquierda
@@ -440,7 +440,7 @@ AbstractBinaryTreeADT<T> {
 					else
 						return this.getLeftBST().getContentRec(sb);
 				}else if(us == '1'){
-					if(this.getLeftBST()==null) 
+					if(this.getRightBST()==null) 
 						throw new NoSuchElementException();
 					else
 						return this.getRightBST().getContentRec(sb);
