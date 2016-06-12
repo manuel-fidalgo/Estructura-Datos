@@ -235,8 +235,22 @@ public class HashTableImpl<K, V> implements HashTable<K, V> {
 		return false;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public V get(K key) {
+		int posicion = hash.apply(cells.length,key);
+		Cell<K, V> c = null;
+		c = (Cell<K,V>)cells[posicion];
+		
+		if(c.key.equals(key)){
+			return c.value;
+		}else{
+			posicion = clinks[posicion];
+			c = (Cell<K,V>)overflow[posicion];
+			if(c.key.equals(key)){
+				return c.value;
+			}
+		}
 		return null;
 	}
 
