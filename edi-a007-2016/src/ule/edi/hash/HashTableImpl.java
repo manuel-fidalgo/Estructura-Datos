@@ -205,7 +205,26 @@ public class HashTableImpl<K, V> implements HashTable<K, V> {
 	 */
 	@Override
 	public void put(K key, V value) {
-		
+		int poscion = hash.apply(cells.length,key);
+		if(isAvailable(cells,poscion)){
+			setCell(new Cell<K,V>(key,value),poscion,cells);
+		}else{
+			if(firstAvailable==overflow.length){
+				rehash();
+			}
+			if(clinks[poscion]==NILL){	//Es la primera colision
+				setCell(new Cell<K,V>(key,value),firstAvailable,overflow);
+				clinks[poscion] = firstAvailable;
+				firstAvailable++;
+			}else{						//Ya ha habido mas colisiones
+				int old_value = clinks[olinks[poscion]];
+				clinks[poscion] = firstAvailable;
+				setCell(new Cell<K,V>(key,value),firstAvailable,overflow);
+				olinks[firstAvailable] = old_value;
+				firstAvailable++;
+				
+			}
+		}
 	}
 
 	private void rehash() {
@@ -230,8 +249,31 @@ public class HashTableImpl<K, V> implements HashTable<K, V> {
 		olinks = newOlinks;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public boolean contains(K key) {
+		int posicion = hash.apply(cells.length, key);
+		boolean found = false;
+		Cell<K,V> c;
+	
+		c = (Cell<K, V>)cells[posicion];
+		if(c.key.equals(key)){
+			return true;
+		}else{
+			posicion = clinks[posicion];
+			//Look in overflow zone
+			while(!found){
+				c = (Cell<K, V>)overflow[posicion];
+				if(c.key.equals(key)){
+					return true;
+				}else{
+					posicion = olinks[posicion];
+					if(posicion==NILL){
+						return false;
+					}
+				}
+			}
+		}
 		return false;
 	}
 
