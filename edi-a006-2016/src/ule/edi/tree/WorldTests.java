@@ -135,7 +135,6 @@ public class WorldTests {
 		}
 		w.insert("", new Entity(2));
 		w.findFirstDragonInBreadthOrder();
-		
 	}
 	
 

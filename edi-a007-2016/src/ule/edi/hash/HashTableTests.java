@@ -1,5 +1,7 @@
 package ule.edi.hash;
 
+import static org.junit.Assert.*;
+
 import java.util.Collections;
 import java.util.List;
 
@@ -45,11 +47,16 @@ public class HashTableTests {
 		t.put(key(n), value(n));
 	}
 	
-	@Ignore
+	@Test
 	public void testPrinting() {
 		
 		TS.put("Z", "VZ");
+		TS.put("Z", "VZ");
 		System.out.println(TS);
+	}
+	@Test
+	public void test00(){
+		assertTrue(true);
 	}
 
 }

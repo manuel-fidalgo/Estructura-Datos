@@ -146,8 +146,15 @@ public class HashTableImpl<K, V> implements HashTable<K, V> {
      * disponible, una 'lista enlazada' de posiciones disponibles en desbordamiento.
 	 */
 	public HashTableImpl() {
-	
-		// TODO preparar una tabla vacía de tamaños por defecto
+		this.cells = new Object[DEFAULT_CELL_ARRAY_SIZE];
+		this.clinks = new int [DEFAULT_CELL_ARRAY_SIZE];
+		this.overflow = new Object[DEFAULT_OVERFLOW_ARRAY_SIZE];
+		this.olinks = new int[DEFAULT_OVERFLOW_ARRAY_SIZE];
+		this.firstAvailable = 0;
+		
+		for (int i = 0; i < clinks.length; i++) {
+			this.clinks[i] = NILL;
+		}
 	}
 	
 	/**
@@ -159,7 +166,16 @@ public class HashTableImpl<K, V> implements HashTable<K, V> {
 	 */
 	public HashTableImpl(HashFunction<K> h, int n, int m) {
 		
-		// TODO preparar una tabla vacía de tamaños y función hash dados		
+		this.cells = new Object[n];
+		this.clinks = new int[n];
+		this.overflow = new Object[m];
+		this.olinks = new int[m];
+		this.firstAvailable = 0;
+		
+		for (int i = 0; i < clinks.length; i++) {
+			this.clinks[i] = NILL;
+		}
+		
 	}
 
 	/*
@@ -180,15 +196,46 @@ public class HashTableImpl<K, V> implements HashTable<K, V> {
 	 */
 	@Override
 	public void put(K key, V value) {
-
+		int length = this.cells.length;
+		int posicion = hash.apply(length,key);
+		if(isAvailable(cells, posicion)){
+			setCell(new Cell<K,V>(key, value),posicion,cells);
+		}else{
+			if(firstAvailable == overflow.length){
+				rehash();
+			}
+			setCell(new Cell<K,V>(key,value),firstAvailable,overflow);
+			clinks[posicion] = firstAvailable;
+			firstAvailable++;
+		}
+		
 		// TODO implementar según especificación
+	}
+
+	private void rehash() {
+		Object[] newCells = new Object[cells.length*2];
+		int [] newClinks = new int[clinks.length*2];
+		for (int i = 0; i < cells.length; i++) {
+			newCells[i] = cells[i];
+			newClinks[i] = clinks[i];
+		}
+		Object[] newOverflow = new Object[overflow.length*2];
+		int[] newOlinks = new int[olinks.length*2];
+		for (int i = 0; i < cells.length; i++) {
+			newOverflow[i] = overflow[i];
+			newOlinks[i] = olinks[i];
+		}
+		cells = newCells;
+		clinks = newClinks;
+		
+		overflow = newOverflow;
+		olinks = newOlinks;
 	}
 
 	@Override
 	public boolean contains(K key) {
 	
-		// TODO implementar según especificación
-		return false;
+		return true;
 	}
 
 	@Override
