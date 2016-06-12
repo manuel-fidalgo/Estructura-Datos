@@ -51,7 +51,11 @@ public class HashTableTests {
 	public void testPrinting() {
 		
 		TS.put("Z", "VZ");
-		TS.put("Z", "VZ");
+		TS.put("Z", "VZX");
+		TS.put("Z","YOK");
+		TS.put("Z","NU");
+		TS.put("X", "XIJ");
+		TS.put("Z", "OO");
 		System.out.println(TS);
 	}
 	@Test

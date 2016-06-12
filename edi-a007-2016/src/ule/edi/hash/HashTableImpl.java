@@ -1,5 +1,6 @@
 package ule.edi.hash;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class HashTableImpl<K, V> implements HashTable<K, V> {
@@ -35,6 +36,10 @@ public class HashTableImpl<K, V> implements HashTable<K, V> {
 		
 			this.key = key;
 			
+			this.value = value;
+		}
+		/*Si al insertar se encuentra una celda con la misma clave se cambia el valor*/
+		public void changeValue(V value){
 			this.value = value;
 		}
 		
@@ -175,6 +180,10 @@ public class HashTableImpl<K, V> implements HashTable<K, V> {
 		for (int i = 0; i < clinks.length; i++) {
 			this.clinks[i] = NILL;
 		}
+		for (int i = 0; i < olinks.length; i++) {
+			this.olinks[i] = i+1;
+		}
+		this.olinks[this.olinks.length-1] = NILL;
 		
 	}
 
@@ -196,34 +205,23 @@ public class HashTableImpl<K, V> implements HashTable<K, V> {
 	 */
 	@Override
 	public void put(K key, V value) {
-		int length = this.cells.length;
-		int posicion = hash.apply(length,key);
-		if(isAvailable(cells, posicion)){
-			setCell(new Cell<K,V>(key, value),posicion,cells);
-		}else{
-			if(firstAvailable == overflow.length){
-				rehash();
-			}
-			setCell(new Cell<K,V>(key,value),firstAvailable,overflow);
-			clinks[posicion] = firstAvailable;
-			firstAvailable++;
-		}
 		
-		// TODO implementar según especificación
 	}
 
 	private void rehash() {
-		Object[] newCells = new Object[cells.length*2];
-		int [] newClinks = new int[clinks.length*2];
+		Object[] newCells = new Object[Primes.next(cells.length*2)];
+		int [] newClinks = new int[Primes.next(clinks.length*2)];
 		for (int i = 0; i < cells.length; i++) {
 			newCells[i] = cells[i];
 			newClinks[i] = clinks[i];
 		}
-		Object[] newOverflow = new Object[overflow.length*2];
-		int[] newOlinks = new int[olinks.length*2];
+		
+		Object[] newOverflow = new Object[Primes.next(overflow.length*2)];
+		int[] newOlinks = new int[Primes.next(olinks.length*2)];
+		
 		for (int i = 0; i < cells.length; i++) {
 			newOverflow[i] = overflow[i];
-			newOlinks[i] = olinks[i];
+			newOlinks[i] = olinks[i];		//Posible bug, inicializar en orden acdente las posiciones nuevas
 		}
 		cells = newCells;
 		clinks = newClinks;
@@ -234,21 +232,17 @@ public class HashTableImpl<K, V> implements HashTable<K, V> {
 
 	@Override
 	public boolean contains(K key) {
-	
-		return true;
+		return false;
 	}
 
 	@Override
 	public V get(K key) {
-		
-		// TODO implementar según especificación
 		return null;
 	}
 
 	@Override
 	public void remove(K key) {
 
-		// TODO implementar según especificación
 	}
 
 	@Override
@@ -280,22 +274,58 @@ public class HashTableImpl<K, V> implements HashTable<K, V> {
 	@Override
 	public long size() {
 
-		// TODO implementar según especificación
-		return 0;
+		long size=0;
+		for(Object i : cells){
+			if(i!=null){
+				size++;
+			}
+		}
+		for(Object i : overflow){
+			if(i!=null){
+				size++;
+			}
+		}
+		return size;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<K> keys() {
-		
-		// TODO implementar según especificación
-		return null;
+		List<K> list = new ArrayList<K>();
+		Cell<K, V> c = null;
+		for(Object i : cells){
+			if(i!=null){
+				c = (Cell<K,V>)i;
+				list.add(c.key);
+			}
+		}
+		for(Object i : overflow){
+			if(i!=null){
+				c = (Cell<K,V>)i;
+				list.add(c.key);
+			}
+		}
+		return list;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<V> values() {
-
-		// TODO implementar según especificación
-		return null;
+		List<V> list = new ArrayList<V>();
+		Cell<K, V> c = null;
+		for(Object i : cells){
+			if(i!=null){
+				c = (Cell<K,V>)i;
+				list.add(c.value);
+			}
+		}
+		for(Object i : overflow){
+			if(i!=null){
+				c = (Cell<K,V>)i;
+				list.add(c.value);
+			}
+		}
+		return list;
 	}
 	
 	//
