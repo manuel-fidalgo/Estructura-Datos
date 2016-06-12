@@ -50,17 +50,35 @@ public class HashTableTests {
 	@Test
 	public void testPrinting() {
 		
-		TS.put("Z", "VZ");
-		TS.put("Z", "VZX");
-		TS.put("Z","YOK");
-		TS.put("Z","NU");
-		TS.put("X", "XIJ");
-		TS.put("Z", "OO");
+		TS.put("A","0");
+		TS.put("A", "1");
+		TS.put("B", "2");
+		TS.put("D", "3");
+		TS.put("G", "4");
+		TS.put("J", "5");
 		System.out.println(TS);
 	}
 	@Test
 	public void test00(){
-		assertTrue(true);
+		TS = new HashTableImpl<String,String>();
+		//TS.contains("Hola");
+		//TS.get("Hola");
 	}
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

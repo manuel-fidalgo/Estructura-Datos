@@ -3,6 +3,8 @@ package ule.edi.hash;
 import java.util.ArrayList;
 import java.util.List;
 
+import ule.edi.hash.HashTableImpl.Cell;
+
 public class HashTableImpl<K, V> implements HashTable<K, V> {
 	
 	/**
@@ -203,23 +205,34 @@ public class HashTableImpl<K, V> implements HashTable<K, V> {
 	 *  (non-Javadoc)
 	 * @see ule.edi.hash.HashTable#put(java.lang.Object, java.lang.Object)
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
 	public void put(K key, V value) {
 		int poscion = hash.apply(cells.length,key);
+		Cell<K, V> c;
+		Cell<K, V> insert = new Cell<K,V>(key,value);
+		
 		if(isAvailable(cells,poscion)){
-			setCell(new Cell<K,V>(key,value),poscion,cells);
+			setCell(insert,poscion,cells);
+			
 		}else{
+			c = (Cell<K,V>)cells[poscion];
+			if(c.equals(insert)){
+				setCell(insert, poscion, cells);
+				return;
+			}
 			if(firstAvailable==overflow.length){
 				rehash();
 			}
 			if(clinks[poscion]==NILL){	//Es la primera colision
-				setCell(new Cell<K,V>(key,value),firstAvailable,overflow);
+				setCell(insert,firstAvailable,overflow);
 				clinks[poscion] = firstAvailable;
+				olinks[firstAvailable] = NILL;
 				firstAvailable++;
 			}else{						//Ya ha habido mas colisiones
-				int old_value = clinks[olinks[poscion]];
+				int old_value = clinks[poscion];
 				clinks[poscion] = firstAvailable;
-				setCell(new Cell<K,V>(key,value),firstAvailable,overflow);
+				setCell(insert,firstAvailable,overflow);
 				olinks[firstAvailable] = old_value;
 				firstAvailable++;
 				
@@ -230,6 +243,7 @@ public class HashTableImpl<K, V> implements HashTable<K, V> {
 	private void rehash() {
 		Object[] newCells = new Object[Primes.next(cells.length*2)];
 		int [] newClinks = new int[Primes.next(clinks.length*2)];
+		
 		for (int i = 0; i < cells.length; i++) {
 			newCells[i] = cells[i];
 			newClinks[i] = clinks[i];
@@ -257,7 +271,7 @@ public class HashTableImpl<K, V> implements HashTable<K, V> {
 		Cell<K,V> c;
 	
 		c = (Cell<K, V>)cells[posicion];
-		if(c.key.equals(key)){
+		if(c!=null && c.key.equals(key)){
 			return true;
 		}else{
 			posicion = clinks[posicion];
