@@ -82,21 +82,37 @@ public class HashTableTests {
 		TS.put("Q","16");
 		TS.put("R","17");
 		TS.put("F","18");
-		System.out.println(TS);
+		
 		assertTrue(TS.contains("A"));
 		assertTrue(TS.contains("B"));
 		assertTrue(TS.contains("C"));
 		assertTrue(TS.contains("N"));
 		assertTrue(TS.contains("Q"));
 		assertTrue(!TS.contains("Z"));
-		assertTrue(TS.contains("A"));
-		assertTrue(TS.contains("B"));
-		assertTrue(TS.contains("C"));
-		assertTrue(TS.contains("C"));
-		assertTrue(TS.contains("D"));
-		assertTrue(!TS.contains("Z"));
+		assertEquals(TS.get("A"),"00");
+		assertEquals(TS.get("B"),"01");
+		assertEquals(TS.get("C"),"02");
+		assertEquals(TS.get("Q"),"16");
+		assertEquals(TS.get("K"),"10");
+		try{
+		assertEquals(TS.get("Z"),"yoksetiooooo");
+		}catch(UnsupportedOperationException e){
+			assertTrue(true);
+		}
+		TS.put("K","20");
+		assertEquals("20",TS.get("K"));
+		TS.put("AA","21");
+		TS.put("AN","22");
+		TS.put("NA","22");
+		TS.put("NN","22");
+		TS.put("NA","24");
+		assertEquals(TS.get("NA"),"24");
+		TS.put("AAA","25");
+		TS.put("ANA","25");
+		TS.put("NAN", "26"); //Todo correcto hasta aqui
+		TS.put("NNN", "27");
 		
-		
+		System.out.println(TS);
 	}
 
 }

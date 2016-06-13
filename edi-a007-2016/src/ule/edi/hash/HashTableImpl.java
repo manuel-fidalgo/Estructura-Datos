@@ -226,6 +226,10 @@ public class HashTableImpl<K, V> implements HashTable<K, V> {
 			if(firstAvailable==overflow.length){
 				rehash();
 				poscion = hash.apply(cells.length,key);
+				if(isAvailable(cells, poscion)){
+					setCell(insert, poscion, cells);
+					return;
+				}
 			}
 			//Se mira que no haya en la zona de overflow ninguna clave igual a la que se va a insertar
 			for(int i=0; i<overflow.length; i++){
@@ -310,7 +314,7 @@ public class HashTableImpl<K, V> implements HashTable<K, V> {
 		Cell<K, V> c = null;
 		c = getCell(cells,posicion);
 
-		if(c.key.equals(key)){
+		if(c!= null && c.key.equals(key)){
 			return c.value;
 		}else{
 			while(!found){
