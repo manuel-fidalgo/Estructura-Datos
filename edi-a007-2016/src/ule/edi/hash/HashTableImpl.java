@@ -3,6 +3,8 @@ package ule.edi.hash;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.text.Position;
+
 import ule.edi.hash.HashTableImpl.Cell;
 
 public class HashTableImpl<K, V> implements HashTable<K, V> {
@@ -223,6 +225,7 @@ public class HashTableImpl<K, V> implements HashTable<K, V> {
 			//Miramos a ver si el tamaño necesita rehash
 			if(firstAvailable==overflow.length){
 				rehash();
+				poscion = hash.apply(cells.length,key);
 			}
 			//Se mira que no haya en la zona de overflow ninguna clave igual a la que se va a insertar
 			for(int i=0; i<overflow.length; i++){
@@ -263,6 +266,7 @@ public class HashTableImpl<K, V> implements HashTable<K, V> {
 			c =  getCell(oldCells, i);
 			put(c.key, c.value);
 		}
+		this.firstAvailable = 0;
 		for (int i = 0; i < oldOverflow.length; i++) {
 			c =  getCell(oldOverflow, i);
 			put(c.key, c.value);
@@ -281,10 +285,11 @@ public class HashTableImpl<K, V> implements HashTable<K, V> {
 			return true;
 		}else{
 			posicion = clinks[posicion];
+			if(posicion==NILL) return false;
 			//Look in overflow zone
 			while(!found){
 				c = getCell(overflow,posicion);
-				if(c.key.equals(key)){
+				if(c != null && c.key.equals(key)){
 					return true;
 				}else{
 					posicion = olinks[posicion];
@@ -299,6 +304,8 @@ public class HashTableImpl<K, V> implements HashTable<K, V> {
 
 	@Override
 	public V get(K key) {
+		boolean found = false;
+		if(!contains(key)) throw new UnsupportedOperationException();
 		int posicion = hash.apply(cells.length,key);
 		Cell<K, V> c = null;
 		c = getCell(cells,posicion);
@@ -306,10 +313,12 @@ public class HashTableImpl<K, V> implements HashTable<K, V> {
 		if(c.key.equals(key)){
 			return c.value;
 		}else{
-			posicion = clinks[posicion];
-			c = getCell(overflow,posicion);
-			if(c.key.equals(key)){
-				return c.value;
+			while(!found){
+				posicion = clinks[posicion];
+				c = getCell(overflow,posicion);
+				if(c.key.equals(key)){
+					return c.value;
+				}
 			}
 		}
 		return null;

@@ -83,6 +83,19 @@ public class HashTableTests {
 		TS.put("R","17");
 		TS.put("F","18");
 		System.out.println(TS);
+		assertTrue(TS.contains("A"));
+		assertTrue(TS.contains("B"));
+		assertTrue(TS.contains("C"));
+		assertTrue(TS.contains("N"));
+		assertTrue(TS.contains("Q"));
+		assertTrue(!TS.contains("Z"));
+		assertTrue(TS.contains("A"));
+		assertTrue(TS.contains("B"));
+		assertTrue(TS.contains("C"));
+		assertTrue(TS.contains("C"));
+		assertTrue(TS.contains("D"));
+		assertTrue(!TS.contains("Z"));
+		
 		
 	}
 
