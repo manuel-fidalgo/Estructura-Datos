@@ -6,7 +6,7 @@ import java.util.List;
 import ule.edi.hash.HashTableImpl.Cell;
 
 public class HashTableImpl<K, V> implements HashTable<K, V> {
-	
+
 	/**
 	 * Función que indica el índice en el array de celdas para una clave.
 	 * 
@@ -15,7 +15,7 @@ public class HashTableImpl<K, V> implements HashTable<K, V> {
 	 * @param <K>
 	 */
 	public static interface HashFunction<K> {
-		
+
 		/**
 		 * Indica el índice en un array de tamaño n.
 		 * 
@@ -30,69 +30,69 @@ public class HashTableImpl<K, V> implements HashTable<K, V> {
 	 * Valor para los 'enlaces' a siguiente similar a null en listas enlazadas
 	 */
 	static final int NILL = -1;
-	
+
 
 	static class Cell<K, V> {
-		
+
 		public Cell(K key, V value) {
-		
+
 			this.key = key;
-			
+
 			this.value = value;
 		}
 		/*Si al insertar se encuentra una celda con la misma clave se cambia el valor*/
 		public void changeValue(V value){
 			this.value = value;
 		}
-		
+
 		@Override
 		public boolean equals(Object obj) {
-		
+
 			if (this == obj) {
-				
+
 				return true;
 			}
-			
+
 			if (obj instanceof Cell) {
-				
+
 				Cell<?, ?> other = (Cell<?, ?>) obj;
-				
+
 				return (key.equals(other.key));
 			}
-			
+
 			return false;
 		}
 
 
 		@Override
 		public String toString() {
-			
+
 			return "(" + key + ", " + value + ")";
 		}
 
 
 		K key;
-		
+
 		V value;
 	};
-	
+
 	//	Array de celdas, primario
 	private Object[] cells;
-	
+
 	//	Enlaces
 	private int[] clinks;
-	
-	
+
+
 	//	Colisiones
 	private int firstAvailable;
-	
+
 	private Object[] overflow;
-	
+
 	private int[] olinks;
-	
-	
+
+
 	private long nElements;
-	
+
 	//	por defecto
 	private HashFunction<K> hash = new HashFunction<K>() {
 
@@ -107,25 +107,25 @@ public class HashTableImpl<K, V> implements HashTable<K, V> {
 	//
 	@SuppressWarnings("unchecked")
 	private Cell<K, V> getCell(Object[] from, int n) {
-		
+
 		return (Cell<K, V>) from[n];
 	}
-	
+
 	private void setCell(Cell<K, V> c, int n, Object[] into) {
-		
+
 		into[n] = c;
 	}
 
 	private boolean isAvailable(Object[] in, int n) {
-		
+
 		return (in[n] == null);
 	}
 
 
 	static final int DEFAULT_CELL_ARRAY_SIZE = 5;
-	
+
 	static final int DEFAULT_OVERFLOW_ARRAY_SIZE = 5;
-	
+
 	/**
 	 * Construye una tabla vacía del tamaño por defecto.
 	 * 
@@ -133,24 +133,24 @@ public class HashTableImpl<K, V> implements HashTable<K, V> {
 	 * 
 	 * En cells[] nulls, en clinks[] NILL:
 	 * 
-     * Celdas:
-     * 00000: null >> -
-     * 00001: null >> -
-     * 00002: null >> -
-     * 00003: null >> -
-     * 00004: null >> -
-     * 
-     * En overflow[] nulls, en olinks[] índices:
-     * 
-     * Colisiones: primero disponible: 00000
-     * 00000: null >> 1
-     * 00001: null >> 2
-     * 00002: null >> 3
-     * 00003: null >> 4
-     * 00004: null >> -
-     * 
-     * Los valores de olink construyen junto con el índice del primero
-     * disponible, una 'lista enlazada' de posiciones disponibles en desbordamiento.
+	 * Celdas:
+	 * 00000: null >> -
+	 * 00001: null >> -
+	 * 00002: null >> -
+	 * 00003: null >> -
+	 * 00004: null >> -
+	 * 
+	 * En overflow[] nulls, en olinks[] índices:
+	 * 
+	 * Colisiones: primero disponible: 00000
+	 * 00000: null >> 1
+	 * 00001: null >> 2
+	 * 00002: null >> 3
+	 * 00003: null >> 4
+	 * 00004: null >> -
+	 * 
+	 * Los valores de olink construyen junto con el índice del primero
+	 * disponible, una 'lista enlazada' de posiciones disponibles en desbordamiento.
 	 */
 	public HashTableImpl() {
 		this.cells = new Object[DEFAULT_CELL_ARRAY_SIZE];
@@ -158,12 +158,12 @@ public class HashTableImpl<K, V> implements HashTable<K, V> {
 		this.overflow = new Object[DEFAULT_OVERFLOW_ARRAY_SIZE];
 		this.olinks = new int[DEFAULT_OVERFLOW_ARRAY_SIZE];
 		this.firstAvailable = 0;
-		
+
 		for (int i = 0; i < clinks.length; i++) {
 			this.clinks[i] = NILL;
 		}
 	}
-	
+
 	/**
 	 * Construye una tabla vacía con parámetros específicos.
 	 * 
@@ -172,13 +172,13 @@ public class HashTableImpl<K, V> implements HashTable<K, V> {
 	 * @param m tamaño de la zona de desbordamiento
 	 */
 	public HashTableImpl(HashFunction<K> h, int n, int m) {
-		
+
 		this.cells = new Object[n];
 		this.clinks = new int[n];
 		this.overflow = new Object[m];
 		this.olinks = new int[m];
 		this.firstAvailable = 0;
-		
+
 		for (int i = 0; i < clinks.length; i++) {
 			this.clinks[i] = NILL;
 		}
@@ -186,7 +186,7 @@ public class HashTableImpl<K, V> implements HashTable<K, V> {
 			this.olinks[i] = i+1;
 		}
 		this.olinks[this.olinks.length-1] = NILL;
-		
+
 	}
 
 	/*
@@ -205,79 +205,85 @@ public class HashTableImpl<K, V> implements HashTable<K, V> {
 	 *  (non-Javadoc)
 	 * @see ule.edi.hash.HashTable#put(java.lang.Object, java.lang.Object)
 	 */
-	@SuppressWarnings("unchecked")
 	@Override
 	public void put(K key, V value) {
 		int poscion = hash.apply(cells.length,key);
-		Cell<K, V> c;
+		int oldvalue = 0;
+		Cell<K, V> c = getCell(cells,poscion);
 		Cell<K, V> insert = new Cell<K,V>(key,value);
-		
+
 		if(isAvailable(cells,poscion)){
 			setCell(insert,poscion,cells);
-			
 		}else{
-			c = (Cell<K,V>)cells[poscion];
+			//Hay una colision, miramos a ver si tiene la misma clave
 			if(c.equals(insert)){
 				setCell(insert, poscion, cells);
 				return;
 			}
+			//Miramos a ver si el tamaño necesita rehash
 			if(firstAvailable==overflow.length){
 				rehash();
 			}
-			if(clinks[poscion]==NILL){	//Es la primera colision
-				setCell(insert,firstAvailable,overflow);
-				clinks[poscion] = firstAvailable;
-				olinks[firstAvailable] = NILL;
-				firstAvailable++;
-			}else{						//Ya ha habido mas colisiones
-				int old_value = clinks[poscion];
-				clinks[poscion] = firstAvailable;
-				setCell(insert,firstAvailable,overflow);
-				olinks[firstAvailable] = old_value;
-				firstAvailable++;
-				
+			//Se mira que no haya en la zona de overflow ninguna clave igual a la que se va a insertar
+			for(int i=0; i<overflow.length; i++){
+				c = getCell(overflow, i);
+				if(c != null && c.equals(insert)){
+					setCell(insert, i, overflow);
+				}
 			}
+			//Insartamos donde toque
+			oldvalue = clinks[poscion]; //Lugar donde estaba la ultima insertada
+			setCell(insert,firstAvailable,overflow); 	//insertamos
+			clinks[poscion] = firstAvailable;		//Ponemos la posicon de la insertada en Clinks
+			olinks[firstAvailable] = oldvalue;
+			firstAvailable++;
+
 		}
 	}
 
 	private void rehash() {
-		Object[] newCells = new Object[Primes.next(cells.length*2)];
-		int [] newClinks = new int[Primes.next(clinks.length*2)];
-		
-		for (int i = 0; i < cells.length; i++) {
-			newCells[i] = cells[i];
-			newClinks[i] = clinks[i];
+		Object[] oldCells = this.cells;
+		Object[] oldOverflow = this.overflow;
+
+		cells = new Object[Primes.next(cells.length*2)];
+		clinks = new int[Primes.next(clinks.length*2)];
+		for (int i = 0; i < clinks.length; i++) {
+			clinks[i]=NILL;
 		}
-		
-		Object[] newOverflow = new Object[Primes.next(overflow.length*2)];
-		int[] newOlinks = new int[Primes.next(olinks.length*2)];
-		
-		for (int i = 0; i < cells.length; i++) {
-			newOverflow[i] = overflow[i];
-			newOlinks[i] = olinks[i];		//Posible bug, inicializar en orden acdente las posiciones nuevas
+
+		overflow = new Object[Primes.next(overflow.length*2)];
+		olinks = new int[Primes.next(olinks.length*2)];
+		for (int i = 0; i < olinks.length; i++) {
+			olinks[i]=i+1;
 		}
-		cells = newCells;
-		clinks = newClinks;
-		
-		overflow = newOverflow;
-		olinks = newOlinks;
+		olinks[olinks.length-1]=NILL;
+
+		Cell<K,V> c = null;
+		for (int i = 0; i < oldCells.length; i++) {
+			c =  getCell(oldCells, i);
+			put(c.key, c.value);
+		}
+		for (int i = 0; i < oldOverflow.length; i++) {
+			c =  getCell(oldOverflow, i);
+			put(c.key, c.value);
+		}
+
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public boolean contains(K key) {
 		int posicion = hash.apply(cells.length, key);
 		boolean found = false;
 		Cell<K,V> c;
-	
-		c = (Cell<K, V>)cells[posicion];
+
+		c = getCell(cells,posicion);
 		if(c!=null && c.key.equals(key)){
 			return true;
 		}else{
 			posicion = clinks[posicion];
 			//Look in overflow zone
 			while(!found){
-				c = (Cell<K, V>)overflow[posicion];
+				c = getCell(overflow,posicion);
 				if(c.key.equals(key)){
 					return true;
 				}else{
@@ -291,18 +297,17 @@ public class HashTableImpl<K, V> implements HashTable<K, V> {
 		return false;
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public V get(K key) {
 		int posicion = hash.apply(cells.length,key);
 		Cell<K, V> c = null;
-		c = (Cell<K,V>)cells[posicion];
-		
+		c = getCell(cells,posicion);
+
 		if(c.key.equals(key)){
 			return c.value;
 		}else{
 			posicion = clinks[posicion];
-			c = (Cell<K,V>)overflow[posicion];
+			c = getCell(overflow,posicion);
 			if(c.key.equals(key)){
 				return c.value;
 			}
@@ -310,16 +315,21 @@ public class HashTableImpl<K, V> implements HashTable<K, V> {
 		return null;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public void remove(K key) {
-
+		int posicion = hash.apply(cells.length, key);
+		Cell<K,V> c = getCell(cells,posicion);
+		if(c.key.equals(key)){
+			cells[posicion] = null;
+		}
 	}
 
 	@Override
 	public String toString() {
-		
+
 		StringBuffer rx = new StringBuffer();
-		
+
 		rx.append("Celdas:\n");
 		for (int n = 0; n < cells.length; ++n) {
 			rx.append(String.format("%05d", n) + ": ");
@@ -328,7 +338,7 @@ public class HashTableImpl<K, V> implements HashTable<K, V> {
 			rx.append("\n");
 		}
 		rx.append("\n");
-		
+
 		rx.append("Colisiones: primero disponible: " + String.format("%05d", firstAvailable) + "\n");
 		for (int n = 0; n < overflow.length; ++n) {
 			rx.append(String.format("%05d", n) + ": ");
@@ -337,7 +347,7 @@ public class HashTableImpl<K, V> implements HashTable<K, V> {
 			rx.append("\n");
 		}
 		rx.append("\n");
-		
+
 		return rx.toString();
 	}
 
@@ -397,33 +407,33 @@ public class HashTableImpl<K, V> implements HashTable<K, V> {
 		}
 		return list;
 	}
-	
+
 	//
 	//	Para JUnit
 	//
 	Object[] getCells() {
-		
+
 		return cells;
 	}
-	
+
 	int[] getCLinks() {
-		
+
 		return clinks;
 	}
-	
+
 	Object[] getOverflow() {
-		
+
 		return overflow;
 	}
-	
+
 	int[] getOLinks() {
-		
+
 		return olinks;
 	}
 
 	HashFunction<K> getHashFunction() {
-		
+
 		return hash;
 	}
-		
+
 }

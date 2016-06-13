@@ -49,20 +49,41 @@ public class HashTableTests {
 	
 	@Test
 	public void testPrinting() {
-		
-		TS.put("A","0");
+		/*
+		TS.put("A", "0");
 		TS.put("A", "1");
 		TS.put("B", "2");
 		TS.put("D", "3");
 		TS.put("G", "4");
 		TS.put("J", "5");
+		TS.put("Z", "6");
 		System.out.println(TS);
+		*/
 	}
 	@Test
 	public void test00(){
 		TS = new HashTableImpl<String,String>();
-		//TS.contains("Hola");
-		//TS.get("Hola");
+		TS.put("A","00");
+		TS.put("B","01");
+		TS.put("C","02");
+		TS.put("D","03");
+		TS.put("E","04");
+		TS.put("F","05");
+		TS.put("G","06");
+		TS.put("H","07");
+		TS.put("I","08");
+		TS.put("J","09");
+		TS.put("K","10");
+		TS.put("L","11");
+		TS.put("M","12");
+		TS.put("N","13");
+		TS.put("O","14");
+		TS.put("P","15");
+		TS.put("Q","16");
+		TS.put("R","17");
+		TS.put("F","18");
+		System.out.println(TS);
+		
 	}
 
 }
