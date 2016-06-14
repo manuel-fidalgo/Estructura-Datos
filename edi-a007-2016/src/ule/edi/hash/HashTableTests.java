@@ -47,7 +47,7 @@ public class HashTableTests {
 		
 		t.put(key(n), value(n));
 	}
-	
+
 	@Test
 	public void test00(){
 		TS.put("A","00");
@@ -116,8 +116,19 @@ public class HashTableTests {
 		TS.put("J","04");
 		TS.put("AA","05");
 		System.out.println(TS);
+		TS.remove("A");
+		System.out.println("A->\n"+TS);
 		TS.remove("B");
-		System.out.println(TS);
+		System.out.println("B->\n"+TS);
+		TS.remove("E");
+		System.out.println("E->\n"+TS);
+		TS.remove("AA");
+		System.out.println("AA->\n"+TS);
+		TS.remove("I");
+		System.out.println("I->\n"+TS);
+		TS.remove("J");
+		System.out.println("J->\n"+TS);
+		
 	}
 
 }
