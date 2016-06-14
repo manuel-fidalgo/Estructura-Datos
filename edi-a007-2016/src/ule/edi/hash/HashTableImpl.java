@@ -46,9 +46,11 @@ public class HashTableImpl<K, V> implements HashTable<K, V> {
 			this.value = value;
 		}
 		/*Si al insertar se encuentra una celda con la misma clave se cambia el valor*/
+		/*
 		public void changeValue(V value){
 			this.value = value;
 		}
+		*/
 
 		@Override
 		public boolean equals(Object obj) {
@@ -233,6 +235,7 @@ public class HashTableImpl<K, V> implements HashTable<K, V> {
 
 		if(isAvailable(cells,poscion)){
 			setCell(insert,poscion,cells);
+			nElements++;
 		}else{
 			//Miramos si necesita rehash
 			if(firstAvailable==NILL){
@@ -244,7 +247,7 @@ public class HashTableImpl<K, V> implements HashTable<K, V> {
 			setCell(insert,firstAvailable,overflow); 	//insertamos
 			clinks[poscion] = firstAvailable;		//Ponemos la posicon de la insertada en Clinks
 			olinks[firstAvailable] = oldvalue;
-
+			nElements++;
 			for (int i = firstAvailable; i < overflow.length; i++) {
 				if(overflow[i]==null){
 					firstAvailable = i;
@@ -252,7 +255,6 @@ public class HashTableImpl<K, V> implements HashTable<K, V> {
 				}
 			}
 			firstAvailable = NILL;
-
 		}
 	}
 
@@ -419,6 +421,7 @@ public class HashTableImpl<K, V> implements HashTable<K, V> {
 				}
 			}
 		}
+		nElements--;
 		recolocate();
 	}
 
