@@ -119,8 +119,8 @@ public class HashTableImpl<K, V> implements HashTable<K, V> {
 	}
 
 	private void setCell(Cell<K, V> c, int n, Object[] into) {
-
-		into[n] = c;
+		
+		into[n] = c; 
 	}
 
 	private boolean isAvailable(Object[] in, int n) {
@@ -244,15 +244,16 @@ public class HashTableImpl<K, V> implements HashTable<K, V> {
 				poscion = hash.apply(cells.length, key);
 				if(isAvailable(cells, poscion)){
 					setCell(insert, poscion, cells);
+					nElements++;
 					return;
 				}
 			}
 			//Insartamos donde toque
 			oldvalue = clinks[poscion]; //Lugar donde estaba la ultima insertada
 			setCell(insert,firstAvailable,overflow); 	//insertamos
+			nElements++;
 			clinks[poscion] = firstAvailable;		//Ponemos la posicon de la insertada en Clinks
 			olinks[firstAvailable] = oldvalue;
-			nElements++;
 			for (int i = firstAvailable; i < overflow.length; i++) {
 				if(overflow[i]==null){
 					firstAvailable = i;
@@ -284,11 +285,13 @@ public class HashTableImpl<K, V> implements HashTable<K, V> {
 		for (int i = 0; i < oldCells.length; i++) {
 			c =  getCell(oldCells, i);
 			if(c!=null) put(c.key, c.value);
+			nElements--;
 		}
 		this.firstAvailable = 0;
 		for (int i = 0; i < oldOverflow.length; i++) {
 			c =  getCell(oldOverflow, i);
 			if(c!=null) put(c.key, c.value);
+			nElements--;
 		}
 
 	}
@@ -422,7 +425,6 @@ public class HashTableImpl<K, V> implements HashTable<K, V> {
 						olinks[pos] = NILL;
 						//firstAvailable = pos;
 					}
-
 				}
 			}
 		}
@@ -468,7 +470,7 @@ public class HashTableImpl<K, V> implements HashTable<K, V> {
 
 	@Override
 	public long size() {
-
+		/*
 		long size=0;
 		for(Object i : cells){
 			if(i!=null){
@@ -481,6 +483,8 @@ public class HashTableImpl<K, V> implements HashTable<K, V> {
 			}
 		}
 		return size;
+		*/
+		return this.nElements;
 	}
 
 	@SuppressWarnings("unchecked")
