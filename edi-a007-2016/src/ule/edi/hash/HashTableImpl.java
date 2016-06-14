@@ -218,6 +218,18 @@ public class HashTableImpl<K, V> implements HashTable<K, V> {
 		int oldvalue = 0;
 		Cell<K, V> c = getCell(cells,poscion);
 		Cell<K, V> insert = new Cell<K,V>(key,value);
+		//Miramos si coincide donde le toca
+		if(c!= null && c.equals(insert)){
+			setCell(insert, poscion, cells);
+			return;
+		}
+		//Se mira que no haya en la zona de overflow ninguna clave igual a la que se va a insertar
+		for(int i=0; i<overflow.length; i++){
+			c = getCell(overflow, i);
+			if(c != null && c.equals(insert)){
+				setCell(insert, i, overflow);
+			}
+		}
 
 		if(isAvailable(cells,poscion)){
 			setCell(insert,poscion,cells);
@@ -226,18 +238,6 @@ public class HashTableImpl<K, V> implements HashTable<K, V> {
 			if(firstAvailable==NILL){
 				rehash();
 				poscion = hash.apply(cells.length, key);
-			}
-			//Hay una colision, miramos a ver si tiene la misma clave
-			if(c.equals(insert)){
-				setCell(insert, poscion, cells);
-				return;
-			}
-			//Se mira que no haya en la zona de overflow ninguna clave igual a la que se va a insertar
-			for(int i=0; i<overflow.length; i++){
-				c = getCell(overflow, i);
-				if(c != null && c.equals(insert)){
-					setCell(insert, i, overflow);
-				}
 			}
 			//Insartamos donde toque
 			oldvalue = clinks[poscion]; //Lugar donde estaba la ultima insertada
@@ -415,7 +415,7 @@ public class HashTableImpl<K, V> implements HashTable<K, V> {
 						olinks[pos] = NILL;
 						//firstAvailable = pos;
 					}
-					
+
 				}
 			}
 		}

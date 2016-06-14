@@ -107,6 +107,26 @@ public class HashTableTests {
 		TS.put("NAN", "26");
 		TS.put("NNN", "27");
 		TS.put("AAAAAA", "1000");
+		TS.remove("A");
+		TS.remove("B");
+		TS.remove("C");
+		TS.remove("D");
+		TS.remove("E");
+		TS.remove("F");
+		TS.remove("G");
+		TS.remove("H");
+		TS.remove("I");
+		TS.remove("J");
+		TS.remove("K");
+		TS.remove("L");
+		TS.remove("M");
+		TS.remove("N");
+		TS.remove("O");
+		TS.remove("P");
+		TS.remove("Q");
+		TS.remove("R");
+		TS.remove("F");
+		
 		
 		TS = new HashTableImpl<>(hLength,4, 4);
 		TS.put("A","00");
@@ -115,19 +135,28 @@ public class HashTableTests {
 		TS.put("I","03");
 		TS.put("J","04");
 		TS.put("AA","05");
-		System.out.println(TS);
 		TS.remove("A");
-		System.out.println("A->\n"+TS);
 		TS.remove("B");
-		System.out.println("B->\n"+TS);
 		TS.remove("E");
-		System.out.println("E->\n"+TS);
 		TS.remove("AA");
-		System.out.println("AA->\n"+TS);
 		TS.remove("I");
-		System.out.println("I->\n"+TS);
 		TS.remove("J");
-		System.out.println("J->\n"+TS);
+		assertEquals(TS.size(),0);
+		
+		TS = new HashTableImpl<>(hLength,2,2);
+		TS.put("A","00");
+		TS.put("B", "01");
+		TS.put("C", "02");
+		System.out.println(TS);
+		TS.remove("C");
+		System.out.println(TS);
+		TS.put("A", "00");
+		TS.put("B", "01");
+		TS.put("C", "02");
+		TS.put("D", "03");
+		TS.put("E", "04");
+		System.out.println(TS.values().toString());
+		System.out.println(TS.keys().toString());
 		
 	}
 
