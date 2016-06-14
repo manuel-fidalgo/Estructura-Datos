@@ -4,6 +4,7 @@ import static org.junit.Assert.*;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -49,16 +50,14 @@ public class HashTableTests {
 	
 	@Test
 	public void testPrinting() {
-		/*
-		TS.put("A", "0");
-		TS.put("A", "1");
-		TS.put("B", "2");
-		TS.put("D", "3");
-		TS.put("G", "4");
-		TS.put("J", "5");
-		TS.put("Z", "6");
+		TS.put("A","00");
+		TS.put("AA", "01");
+		TS.put("AAA", "02");
+		TS.put("AAAA", "03");
+		TS.put("AAAAA", "04");
+		TS.put("AAAAAA", "05");
+		TS.put("AAAAAAA", "06");
 		System.out.println(TS);
-		*/
 	}
 	@Test
 	public void test00(){
@@ -96,7 +95,7 @@ public class HashTableTests {
 		assertEquals(TS.get("K"),"10");
 		try{
 		assertEquals(TS.get("Z"),"yoksetiooooo");
-		}catch(UnsupportedOperationException e){
+		}catch(NoSuchElementException e){
 			assertTrue(true);
 		}
 		TS.put("K","20");
@@ -109,10 +108,8 @@ public class HashTableTests {
 		assertEquals(TS.get("NA"),"24");
 		TS.put("AAA","25");
 		TS.put("ANA","25");
-		TS.put("NAN", "26"); //Todo correcto hasta aqui
+		TS.put("NAN", "26");
 		TS.put("NNN", "27");
-		
-		System.out.println(TS);
 	}
 
 }

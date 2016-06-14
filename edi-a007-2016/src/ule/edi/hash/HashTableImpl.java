@@ -2,6 +2,7 @@ package ule.edi.hash;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import javax.swing.text.Position;
 
@@ -309,7 +310,7 @@ public class HashTableImpl<K, V> implements HashTable<K, V> {
 	@Override
 	public V get(K key) {
 		boolean found = false;
-		if(!contains(key)) throw new UnsupportedOperationException();
+		if(!contains(key)) throw new NoSuchElementException();
 		int posicion = hash.apply(cells.length,key);
 		Cell<K, V> c = null;
 		c = getCell(cells,posicion);
