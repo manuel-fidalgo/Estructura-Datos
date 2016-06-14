@@ -48,9 +48,16 @@ public class HashTableTests {
 
 		t.put(key(n), value(n));
 	}
-
 	@Test
 	public void test00(){
+		for (int i = 0; i < 30; i++) {
+			Primes.next(i);
+			try{
+				Primes.next(2147483647+1);
+			}catch(IllegalStateException e){
+				
+			}
+		}
 		TS.put("A","00");
 		TS.put("AA", "01");
 		TS.put("AAA", "02");
@@ -182,6 +189,43 @@ public class HashTableTests {
 			assertTrue(!T.contains(i));
 		}
 		assertTrue(T.size()==0);
+
+		TS = new HashTableImpl<>(hLength, 1, 2);
+		TS.put("A", "00");
+		TS.put("B", "01");
+		TS.put("C", "02");
+		assertTrue(TS.size()==3);
+		assertTrue(TS.contains("A"));
+		assertTrue(TS.contains("B"));
+		assertTrue(TS.contains("C"));
+		TS.remove("A");
+		assertTrue(TS.size()==2);
+		assertTrue(!TS.contains("A"));
+		assertTrue(TS.contains("B"));
+		assertTrue(TS.contains("C"));
+		TS.remove("C");
+		
+		HashTableImpl<Integer,Integer> S = new HashTableImpl<Integer,Integer>();
+		S.put(1,1);
+		assertEquals(1,S.size());
+		S.put(6,1);
+		S.put(11,1);
+		S.put(16,1);
+		S.put(21,1);
+		S.put(26,1);
+		S.remove(6);
+		S.remove(26);
+		S.put(31, 0);
+		S.remove(11);
+		S.put(2,2);
+		S.put(7,7);
+		S.put(12, 12);
+		S.put(3,3);
+		S.put(8, 8);
+		System.out.println(S);
+		
+		
+
 	}
 
 }

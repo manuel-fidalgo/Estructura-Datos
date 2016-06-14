@@ -470,7 +470,6 @@ public class HashTableImpl<K, V> implements HashTable<K, V> {
 
 	@Override
 	public long size() {
-		/*
 		long size=0;
 		for(Object i : cells){
 			if(i!=null){
@@ -483,8 +482,7 @@ public class HashTableImpl<K, V> implements HashTable<K, V> {
 			}
 		}
 		return size;
-		*/
-		return this.nElements;
+		//return this.nElements;
 	}
 
 	@SuppressWarnings("unchecked")
