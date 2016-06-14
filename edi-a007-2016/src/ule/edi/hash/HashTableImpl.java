@@ -211,9 +211,7 @@ public class HashTableImpl<K, V> implements HashTable<K, V> {
 	 */
 	@Override
 	public void put(K key, V value) {
-		if(firstAvailable==overflow.length){
-			rehash();
-		}
+		
 		int poscion = hash.apply(cells.length,key);
 		int oldvalue = 0;
 		Cell<K, V> c = getCell(cells,poscion);
@@ -222,6 +220,11 @@ public class HashTableImpl<K, V> implements HashTable<K, V> {
 		if(isAvailable(cells,poscion)){
 			setCell(insert,poscion,cells);
 		}else{
+			//Miramos si necesita rehash
+			if(firstAvailable==overflow.length){
+				rehash();
+				poscion = hash.apply(cells.length, key);
+			}
 			//Hay una colision, miramos a ver si tiene la misma clave
 			if(c.equals(insert)){
 				setCell(insert, poscion, cells);
@@ -264,12 +267,12 @@ public class HashTableImpl<K, V> implements HashTable<K, V> {
 		Cell<K,V> c = null;
 		for (int i = 0; i < oldCells.length; i++) {
 			c =  getCell(oldCells, i);
-			put(c.key, c.value);
+			if(c!=null) put(c.key, c.value);
 		}
 		this.firstAvailable = 0;
 		for (int i = 0; i < oldOverflow.length; i++) {
 			c =  getCell(oldOverflow, i);
-			put(c.key, c.value);
+			if(c!=null) put(c.key, c.value);
 		}
 
 	}
@@ -324,13 +327,58 @@ public class HashTableImpl<K, V> implements HashTable<K, V> {
 		return null;
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public void remove(K key) {
-		int posicion = hash.apply(cells.length, key);
-		Cell<K,V> c = getCell(cells,posicion);
-		if(c.key.equals(key)){
-			cells[posicion] = null;
+		if(!contains(key)) return;
+		boolean found = false;
+		int pos = hash.apply(cells.length, key);
+		int ant=0;
+		if(getCell(cells, pos).key.equals(key)){
+			//Es la que queremos borrar
+			cells[pos] = overflow[clinks[pos]];
+			overflow[clinks[pos]] = null;
+			clinks[pos] = olinks[clinks[pos]];
+			olinks[clinks[pos]] = NILL;
+		}else{
+			//La celda no es la que queremos borrar
+			ant = pos;
+			pos = clinks[pos];
+			if(getCell(overflow, pos).key.equals(key)){
+				clinks[ant] = olinks[pos];
+				overflow[pos] = null;
+				olinks[pos] = NILL;
+			}
+			while(!found){
+				ant = pos;
+				pos = olinks[pos];
+				if(getCell(overflow, pos).key.equals(key)){
+					if(olinks[pos]==NILL){
+						found = true;
+						olinks[ant]=NILL;
+						overflow[pos] = null;
+					}else{
+						found = true;
+						olinks[ant] = olinks[pos];
+						overflow[pos] = null;
+						olinks[pos] = NILL;
+					}
+				}
+			}
+			firstAvailable--;
+			recolocate();
+		}
+	}
+
+	private void recolocate() {
+		for (int i = 0; i < overflow.length; i++) {
+			if(overflow[i]==null){
+				for (int j = i+1; j < cells.length; j++) {
+					overflow[j-1] = overflow[j];
+					olinks[j-1] = olinks[j];
+				}
+				overflow[overflow.length-1]=null;
+				olinks[olinks.length-1]=NILL;
+			}
 		}
 	}
 

@@ -49,18 +49,14 @@ public class HashTableTests {
 	}
 	
 	@Test
-	public void testPrinting() {
+	public void test00(){
 		TS.put("A","00");
 		TS.put("AA", "01");
 		TS.put("AAA", "02");
 		TS.put("AAAA", "03");
 		TS.put("AAAAA", "04");
 		TS.put("AAAAAA", "05");
-		TS.put("AAAAAAA", "06");
-		System.out.println(TS);
-	}
-	@Test
-	public void test00(){
+		TS.put("AAAAAAA", "06");		
 		TS = new HashTableImpl<String,String>();
 		TS.put("A","00");
 		TS.put("B","01");
@@ -111,6 +107,17 @@ public class HashTableTests {
 		TS.put("NAN", "26");
 		TS.put("NNN", "27");
 		TS.put("AAAAAA", "1000");
+		
+		TS = new HashTableImpl<>(hLength,4, 4);
+		TS.put("A","00");
+		TS.put("B","01");
+		TS.put("E","02");
+		TS.put("I","03");
+		TS.put("J","04");
+		TS.put("AA","05");
+		System.out.println(TS);
+		TS.remove("B");
+		System.out.println(TS);
 	}
 
 }
