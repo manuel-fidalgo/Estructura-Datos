@@ -189,6 +189,7 @@ public class HashTableImpl<K, V> implements HashTable<K, V> {
 			this.olinks[i] = i+1;
 		}
 		this.olinks[this.olinks.length-1] = NILL;
+		this.hash = h;
 
 	}
 
@@ -210,6 +211,9 @@ public class HashTableImpl<K, V> implements HashTable<K, V> {
 	 */
 	@Override
 	public void put(K key, V value) {
+		if(firstAvailable==overflow.length){
+			rehash();
+		}
 		int poscion = hash.apply(cells.length,key);
 		int oldvalue = 0;
 		Cell<K, V> c = getCell(cells,poscion);
@@ -222,15 +226,6 @@ public class HashTableImpl<K, V> implements HashTable<K, V> {
 			if(c.equals(insert)){
 				setCell(insert, poscion, cells);
 				return;
-			}
-			//Miramos a ver si el tamaño necesita rehash
-			if(firstAvailable==overflow.length){
-				rehash();
-				poscion = hash.apply(cells.length,key);
-				if(isAvailable(cells, poscion)){
-					setCell(insert, poscion, cells);
-					return;
-				}
 			}
 			//Se mira que no haya en la zona de overflow ninguna clave igual a la que se va a insertar
 			for(int i=0; i<overflow.length; i++){

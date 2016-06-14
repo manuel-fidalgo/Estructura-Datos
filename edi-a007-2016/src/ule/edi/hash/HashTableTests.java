@@ -110,6 +110,7 @@ public class HashTableTests {
 		TS.put("ANA","25");
 		TS.put("NAN", "26");
 		TS.put("NNN", "27");
+		TS.put("AAAAAA", "1000");
 	}
 
 }
