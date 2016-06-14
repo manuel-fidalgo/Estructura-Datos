@@ -397,7 +397,7 @@ public class HashTableImpl<K, V> implements HashTable<K, V> {
 				overflow[pos] = null;
 				olinks[pos] = NILL;
 				//firstAvailable = pos;
-				return;
+				found = true;
 			}
 			while(!found){
 				ant = pos;
@@ -419,24 +419,17 @@ public class HashTableImpl<K, V> implements HashTable<K, V> {
 				}
 			}
 		}
+		recolocate();
 	}
 
-	@SuppressWarnings("unused")
 	private void recolocate() {
-		int pto = 0;
 		for (int i = 0; i < overflow.length; i++) {
-			if(overflow[i]==null){
-				for (int j = i+1; j < cells.length; j++) {
-					overflow[j-1] = overflow[j];
-					olinks[j-1] = olinks[j];
-				}
-				overflow[overflow.length-1]=null;
-				olinks[olinks.length-1]=NILL;
+			if(isAvailable(overflow, i)){
+				firstAvailable = i;
+				return;
 			}
 		}
-		for (int i = 0; i < cells.length; i++) {
-
-		}
+		firstAvailable=NILL;
 	}
 
 	@Override
