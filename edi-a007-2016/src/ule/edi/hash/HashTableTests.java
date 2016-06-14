@@ -48,16 +48,28 @@ public class HashTableTests {
 
 		t.put(key(n), value(n));
 	}
+	@SuppressWarnings("unused")
 	@Test
 	public void test00(){
+		Primes p = new Primes();
 		for (int i = 0; i < 30; i++) {
 			Primes.next(i);
 			try{
-				Primes.next(2147483647+1);
+				Primes.next(2147483647);
 			}catch(IllegalStateException e){
-				
 			}
 		}
+		TS.getCells();
+		TS.getCLinks();
+		TS.getOverflow();
+		TS.getOLinks();
+		TS.getHashFunction();
+		try{
+			TS.get("Canela en rama");
+		}catch(NoSuchElementException e){
+			
+		}
+		
 		TS.put("A","00");
 		TS.put("AA", "01");
 		TS.put("AAA", "02");
@@ -222,8 +234,21 @@ public class HashTableTests {
 		S.put(12, 12);
 		S.put(3,3);
 		S.put(8, 8);
-		System.out.println(S);
+		S.keys().toString();
+		S.values().toString();
 		
+		TS = new HashTableImpl<String, String>(hLength, 3, 3);
+		for (int i = 0; i < 200; i++) {
+			put(TS, i);
+		}
+		for (int i = 0; i < 200; i++) {
+			TS.put(key(i), "otro");
+		}
+		assertTrue(TS.size()==200);
+		for (int i = 0; i < 200; i++) {
+			TS.remove(key(i));
+		}
+		assertTrue(TS.size()==0);
 		
 
 	}

@@ -343,7 +343,7 @@ public class HashTableImpl<K, V> implements HashTable<K, V> {
 
 	@Override
 	public V get(K key) {
-		if(!contains(key)) throw new NoSuchElementException();
+		
 		Cell<K,V> c;
 		for (int i = 0; i < cells.length; i++) {
 			c = getCell(cells, i);
@@ -357,7 +357,7 @@ public class HashTableImpl<K, V> implements HashTable<K, V> {
 				return c.value;
 			}
 		}
-		return null;
+		throw new NoSuchElementException();
 		/*
 		boolean found = false;
 		if(!contains(key)) throw new NoSuchElementException();
