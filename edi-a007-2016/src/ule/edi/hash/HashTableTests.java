@@ -16,7 +16,8 @@ import ule.edi.hash.HashTableImpl.HashFunction;
 public class HashTableTests {
 
 	private HashTableImpl<String, String> TS;
-	
+	//	private static final String[] ABC_ = {"A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"};
+
 	//	Mala función de hash, pero útil para los tests
 	private static final HashFunction<String> hLength =  new HashFunction<String>() {
 
@@ -29,22 +30,22 @@ public class HashTableTests {
 
 	@Before
 	public void setupTables() {
-		
+
 		TS = new HashTableImpl<String, String>(hLength, 3, 3);
 	}
-	
+
 	private String key(int n) {
-		
+
 		return String.format("K%03d", n);
 	}
-	
+
 	private String value(int n) {
-		
+
 		return String.format("V%03d", n);
 	}
-	
+
 	private void put(HashTableImpl<String, String> t, int n) {
-		
+
 		t.put(key(n), value(n));
 	}
 
@@ -77,7 +78,7 @@ public class HashTableTests {
 		TS.put("Q","16");
 		TS.put("R","17");
 		TS.put("F","18");
-		
+
 		assertTrue(TS.contains("A"));
 		assertTrue(TS.contains("B"));
 		assertTrue(TS.contains("C"));
@@ -90,7 +91,7 @@ public class HashTableTests {
 		assertEquals(TS.get("Q"),"16");
 		assertEquals(TS.get("K"),"10");
 		try{
-		assertEquals(TS.get("Z"),"yoksetiooooo");
+			assertEquals(TS.get("Z"),"yoksetiooooo");
 		}catch(NoSuchElementException e){
 			assertTrue(true);
 		}
@@ -126,8 +127,8 @@ public class HashTableTests {
 		TS.remove("Q");
 		TS.remove("R");
 		TS.remove("F");
-		
-		
+
+
 		TS = new HashTableImpl<>(hLength,4, 4);
 		TS.put("A","00");
 		TS.put("B","01");
@@ -142,22 +143,45 @@ public class HashTableTests {
 		TS.remove("I");
 		TS.remove("J");
 		assertEquals(TS.size(),0);
-		
+
 		TS = new HashTableImpl<>(hLength,2,2);
 		TS.put("A","00");
 		TS.put("B", "01");
 		TS.put("C", "02");
-		System.out.println(TS);
 		TS.remove("C");
-		System.out.println(TS);
 		TS.put("A", "00");
 		TS.put("B", "01");
 		TS.put("C", "02");
 		TS.put("D", "03");
 		TS.put("E", "04");
-		System.out.println(TS.values().toString());
-		System.out.println(TS.keys().toString());
-		
+
+
+		HashTableImpl<Integer, String> T = new HashTableImpl<Integer,String>();
+		for (int i = 1; i < 33; i++) {
+			if(i==27){
+				System.out.println("");
+			}
+			T.put(i, "Valor");
+		}
+		for (int i = 1; i < 33; i++) {
+			assertTrue(T.contains(i));
+		}
+		for (int i = 1; i < 17; i++) {
+			T.remove(i);
+		}
+		assertEquals(16,T.size());
+		for (int i = 17; i < 33; i++) {
+			T.put(i, "Hola");
+		}
+		assertEquals(16,T.size());
+		for (int i = 17; i < 33; i++) {
+			assertEquals(T.get(i).toString(),"Hola");
+		}
+		for (int i = 17; i < 33; i++) {
+			T.remove(i);
+			assertTrue(!T.contains(i));
+		}
+		assertTrue(T.size()==0);
 	}
 
 }

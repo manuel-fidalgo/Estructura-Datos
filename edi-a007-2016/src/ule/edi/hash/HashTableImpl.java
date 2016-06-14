@@ -230,6 +230,7 @@ public class HashTableImpl<K, V> implements HashTable<K, V> {
 			c = getCell(overflow, i);
 			if(c != null && c.equals(insert)){
 				setCell(insert, i, overflow);
+				return;
 			}
 		}
 
@@ -241,6 +242,10 @@ public class HashTableImpl<K, V> implements HashTable<K, V> {
 			if(firstAvailable==NILL){
 				rehash();
 				poscion = hash.apply(cells.length, key);
+				if(isAvailable(cells, poscion)){
+					setCell(insert, poscion, cells);
+					return;
+				}
 			}
 			//Insartamos donde toque
 			oldvalue = clinks[poscion]; //Lugar donde estaba la ultima insertada
