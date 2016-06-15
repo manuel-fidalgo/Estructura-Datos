@@ -50,7 +50,7 @@ public class HashTableImpl<K, V> implements HashTable<K, V> {
 		public void changeValue(V value){
 			this.value = value;
 		}
-		*/
+		 */
 
 		@Override
 		public boolean equals(Object obj) {
@@ -119,7 +119,7 @@ public class HashTableImpl<K, V> implements HashTable<K, V> {
 	}
 
 	private void setCell(Cell<K, V> c, int n, Object[] into) {
-		
+
 		into[n] = c; 
 	}
 
@@ -299,7 +299,35 @@ public class HashTableImpl<K, V> implements HashTable<K, V> {
 
 	@Override
 	public boolean contains(K key) {
-		
+		boolean found = false;
+		int posicion = hash.apply(cells.length,key);
+		Cell<K,V> cell = getCell(cells, posicion);
+		if(cell==null){
+			return false;
+		}
+		if(cell.key.equals(key)){
+			return true;
+		}else{//Buscamos en overflow
+			if(clinks[posicion]==NILL){
+				return false;
+			}else{
+				posicion = clinks[posicion]; //Posicion relativa en olinks
+				while(!found){
+					cell = getCell(overflow, posicion);
+					if(cell.key.equals(key)){
+						found = true;
+						return found;
+					}
+					posicion = olinks[posicion];
+					if(posicion==NILL){
+						return found;
+					}
+				}
+			}
+		}
+		return false;
+
+		/*		
 		Cell<K,V> c;
 		for (int i = 0; i < cells.length; i++) {
 			c = getCell(cells, i);
@@ -315,7 +343,7 @@ public class HashTableImpl<K, V> implements HashTable<K, V> {
 		}
 		return false;
 
-		/*
+
 		int posicion = hash.apply(cells.length, key);
 		boolean found = false;
 		Cell<K,V> c;
@@ -345,7 +373,7 @@ public class HashTableImpl<K, V> implements HashTable<K, V> {
 
 	@Override
 	public V get(K key) {
-		
+
 		Cell<K,V> c;
 		for (int i = 0; i < cells.length; i++) {
 			c = getCell(cells, i);
