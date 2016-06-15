@@ -262,9 +262,8 @@ public class HashTableTests {
 		assertTrue(TS.contains("K000"));
 		assertTrue(!TS.contains("K002"));
 		assertTrue(TS.size()==4);
+		assertEquals(TS.toString(),TS.toString());
 		
-		
-
 	}
 
 }

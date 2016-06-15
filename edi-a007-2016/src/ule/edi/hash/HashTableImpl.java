@@ -45,13 +45,6 @@ public class HashTableImpl<K, V> implements HashTable<K, V> {
 
 			this.value = value;
 		}
-		/*Si al insertar se encuentra una celda con la misma clave se cambia el valor*/
-		/*
-		public void changeValue(V value){
-			this.value = value;
-		}
-		 */
-
 		@Override
 		public boolean equals(Object obj) {
 
@@ -235,7 +228,7 @@ public class HashTableImpl<K, V> implements HashTable<K, V> {
 				return;
 			}
 		}
-		//si donde le toca esta vacio
+		//Si donde le toca esta vacio
 		if(isAvailable(cells,poscion)){
 			setCell(insert,poscion,cells);
 			nElements++;
@@ -251,10 +244,10 @@ public class HashTableImpl<K, V> implements HashTable<K, V> {
 				}
 			}
 			//Insartamos donde toque
-			oldvalue = clinks[poscion]; //Lugar donde estaba la ultima insertada
+			oldvalue = clinks[poscion]; 				//Lugar donde estaba la ultima insertada
 			setCell(insert,firstAvailable,overflow); 	//insertamos
 			nElements++;
-			clinks[poscion] = firstAvailable;		//Ponemos la posicon de la insertada en Clinks
+			clinks[poscion] = firstAvailable;			//Ponemos la posicon de la insertada en Clinks
 			olinks[firstAvailable] = oldvalue;
 			for (int i = firstAvailable; i < overflow.length; i++) {
 				if(overflow[i]==null){
@@ -325,55 +318,11 @@ public class HashTableImpl<K, V> implements HashTable<K, V> {
 				}
 			}
 		}
-		return false;
-
-		/*		
-		Cell<K,V> c;
-		for (int i = 0; i < cells.length; i++) {
-			c = getCell(cells, i);
-			if(c!=null && c.key.equals(key)){
-				return true;
-			}
-		}
-		for (int i = 0; i < overflow.length; i++) {
-			c = getCell(overflow, i);
-			if(c!=null && c.key.equals(key)){
-				return true;
-			}
-		}
-		return false;
-
-
-		int posicion = hash.apply(cells.length, key);
-		boolean found = false;
-		Cell<K,V> c;
-
-		c = getCell(cells,posicion);
-		if(c!=null && c.key.equals(key)){
-			return true;
-		}else{
-			posicion = clinks[posicion];
-			if(posicion==NILL) return false;
-			//Look in overflow zone
-			while(!found){
-				c = getCell(overflow,posicion);
-				if(c != null && c.key.equals(key)){
-					return true;
-				}else{
-					posicion = olinks[posicion];
-					if(posicion==NILL){
-						return false;
-					}
-				}
-			}
-		}
-		return false;
-		 */
+		return false;		
 	}
 
 	@Override
 	public V get(K key) {
-		boolean found = false;
 		int posicion = hash.apply(cells.length,key);
 		Cell<K,V> cell = getCell(cells, posicion);
 		if(cell==null){
@@ -386,10 +335,9 @@ public class HashTableImpl<K, V> implements HashTable<K, V> {
 				throw new NoSuchElementException();
 			}else{
 				posicion = clinks[posicion]; //Posicion relativa en olinks
-				while(!found){
+				while(true){
 					cell = getCell(overflow, posicion);
 					if(cell.key.equals(key)){
-						found = true;
 						return cell.value;
 					}
 					posicion = olinks[posicion];
@@ -399,43 +347,6 @@ public class HashTableImpl<K, V> implements HashTable<K, V> {
 				}
 			}
 		}
-		throw new NoSuchElementException();
-		/*
-		Cell<K,V> c;
-		for (int i = 0; i < cells.length; i++) {
-			c = getCell(cells, i);
-			if(c!=null && c.key.equals(key)){
-				return c.value;
-			}
-		}
-		for (int i = 0; i < overflow.length; i++) {
-			c = getCell(overflow, i);
-			if(c!=null && c.key.equals(key)){
-				return c.value;
-			}
-		}
-		throw new NoSuchElementException();
-		*/
-		/*
-		boolean found = false;
-		if(!contains(key)) throw new NoSuchElementException();
-		int posicion = hash.apply(cells.length,key);
-		Cell<K, V> c = null;
-		c = getCell(cells,posicion);
-
-		if(c!= null && c.key.equals(key)){
-			return c.value;
-		}else{
-			while(!found){
-				posicion = clinks[posicion];
-				c = getCell(overflow,posicion);
-				if(c.key.equals(key)){
-					return c.value;
-				}
-			}
-		}
-		return null;
-		 */
 	}
 	/**
 	 * Antes de eleminar hay que mirar cual es la primera posicion vacia y al remover situar en oliks dicha posicion
@@ -457,7 +368,6 @@ public class HashTableImpl<K, V> implements HashTable<K, V> {
 				int old = clinks[pos];
 				clinks[pos] = olinks[clinks[pos]];
 				olinks[old] = NILL;
-				//firstAvailable = old;
 			}
 		}else{
 			//La celda no es la que queremos borrar
@@ -467,7 +377,6 @@ public class HashTableImpl<K, V> implements HashTable<K, V> {
 				clinks[ant] = olinks[pos];
 				overflow[pos] = null;
 				olinks[pos] = NILL;
-				//firstAvailable = pos;
 				found = true;
 			}
 			while(!found){
@@ -478,13 +387,11 @@ public class HashTableImpl<K, V> implements HashTable<K, V> {
 						found = true;
 						olinks[ant]=NILL;
 						overflow[pos] = null;
-						//firstAvailable = pos;
 					}else{
 						found = true;
 						olinks[ant] = olinks[pos];
 						overflow[pos] = null;
 						olinks[pos] = NILL;
-						//firstAvailable = pos;
 					}
 				}
 			}
@@ -531,21 +438,7 @@ public class HashTableImpl<K, V> implements HashTable<K, V> {
 	}
 
 	@Override
-	public long size() {
-		/*
-		long size=0;
-		for(Object i : cells){
-			if(i!=null){
-				size++;
-			}
-		}
-		for(Object i : overflow){
-			if(i!=null){
-				size++;
-			}
-		}
-		return size;
-		*/
+	public long size(){
 		return this.nElements;
 	}
 
