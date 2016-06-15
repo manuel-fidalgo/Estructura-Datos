@@ -299,6 +299,7 @@ public class HashTableImpl<K, V> implements HashTable<K, V> {
 
 	@Override
 	public boolean contains(K key) {
+		
 		Cell<K,V> c;
 		for (int i = 0; i < cells.length; i++) {
 			c = getCell(cells, i);

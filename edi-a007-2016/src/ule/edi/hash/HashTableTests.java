@@ -257,7 +257,12 @@ public class HashTableTests {
 		put(TS,3);
 		put(TS,4);
 		TS.remove("K002");
-		System.out.println(TS);
+		assertTrue(TS.contains("K003"));
+		assertTrue(TS.contains("K001"));
+		assertTrue(TS.contains("K000"));
+		assertTrue(!TS.contains("K002"));
+		assertTrue(TS.size()==4);
+		
 		
 
 	}
