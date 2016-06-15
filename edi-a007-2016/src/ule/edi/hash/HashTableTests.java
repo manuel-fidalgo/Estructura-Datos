@@ -177,7 +177,7 @@ public class HashTableTests {
 
 		HashTableImpl<Integer, String> T = new HashTableImpl<Integer,String>();
 		for (int i = 1; i < 33; i++) {
-			if(i==27){
+			if(i==11){
 				System.out.println("");
 			}
 			T.put(i, "Valor");

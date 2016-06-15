@@ -195,6 +195,7 @@ public class HashTableImpl<K, V> implements HashTable<K, V> {
 		}
 		this.olinks[this.olinks.length-1] = NILL;
 		this.hash = h;
+		this.nElements = 0;
 
 	}
 
@@ -234,7 +235,7 @@ public class HashTableImpl<K, V> implements HashTable<K, V> {
 				return;
 			}
 		}
-
+		//si donde le toca esta vacio
 		if(isAvailable(cells,poscion)){
 			setCell(insert,poscion,cells);
 			nElements++;
@@ -266,6 +267,7 @@ public class HashTableImpl<K, V> implements HashTable<K, V> {
 	}
 
 	private void rehash() {
+		this.nElements=0;
 		Object[] oldCells = this.cells;
 		Object[] oldOverflow = this.overflow;
 
@@ -286,13 +288,11 @@ public class HashTableImpl<K, V> implements HashTable<K, V> {
 		for (int i = 0; i < oldCells.length; i++) {
 			c =  getCell(oldCells, i);
 			if(c!=null) put(c.key, c.value);
-			nElements--;
 		}
 		this.firstAvailable = 0;
 		for (int i = 0; i < oldOverflow.length; i++) {
 			c =  getCell(oldOverflow, i);
 			if(c!=null) put(c.key, c.value);
-			nElements--;
 		}
 
 	}
@@ -373,7 +373,34 @@ public class HashTableImpl<K, V> implements HashTable<K, V> {
 
 	@Override
 	public V get(K key) {
-
+		boolean found = false;
+		int posicion = hash.apply(cells.length,key);
+		Cell<K,V> cell = getCell(cells, posicion);
+		if(cell==null){
+			throw new NoSuchElementException();
+		}
+		if(cell.key.equals(key)){
+			return cell.value;
+		}else{//Buscamos en overflow
+			if(clinks[posicion]==NILL){
+				throw new NoSuchElementException();
+			}else{
+				posicion = clinks[posicion]; //Posicion relativa en olinks
+				while(!found){
+					cell = getCell(overflow, posicion);
+					if(cell.key.equals(key)){
+						found = true;
+						return cell.value;
+					}
+					posicion = olinks[posicion];
+					if(posicion==NILL){
+						throw new NoSuchElementException();
+					}
+				}
+			}
+		}
+		throw new NoSuchElementException();
+		/*
 		Cell<K,V> c;
 		for (int i = 0; i < cells.length; i++) {
 			c = getCell(cells, i);
@@ -388,6 +415,7 @@ public class HashTableImpl<K, V> implements HashTable<K, V> {
 			}
 		}
 		throw new NoSuchElementException();
+		*/
 		/*
 		boolean found = false;
 		if(!contains(key)) throw new NoSuchElementException();
@@ -504,6 +532,7 @@ public class HashTableImpl<K, V> implements HashTable<K, V> {
 
 	@Override
 	public long size() {
+		/*
 		long size=0;
 		for(Object i : cells){
 			if(i!=null){
@@ -516,7 +545,8 @@ public class HashTableImpl<K, V> implements HashTable<K, V> {
 			}
 		}
 		return size;
-		//return this.nElements;
+		*/
+		return this.nElements;
 	}
 
 	@SuppressWarnings("unchecked")
