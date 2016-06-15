@@ -250,6 +250,15 @@ public class HashTableTests {
 		}
 		assertTrue(TS.size()==0);
 		
+		TS = new HashTableImpl<String, String>(hLength, 3, 3);
+		put(TS,0);
+		put(TS,1);
+		put(TS,2);
+		put(TS,3);
+		put(TS,4);
+		TS.remove("K002");
+		System.out.println(TS);
+		
 
 	}
 

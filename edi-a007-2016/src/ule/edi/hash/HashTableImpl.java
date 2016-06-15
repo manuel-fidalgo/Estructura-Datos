@@ -169,6 +169,7 @@ public class HashTableImpl<K, V> implements HashTable<K, V> {
 		for (int i = 0; i < clinks.length; i++) {
 			this.clinks[i] = NILL;
 		}
+		this.nElements=0;
 	}
 
 	/**
@@ -379,7 +380,10 @@ public class HashTableImpl<K, V> implements HashTable<K, V> {
 		return null;
 		 */
 	}
-
+	/**
+	 * Antes de eleminar hay que mirar cual es la primera posicion vacia y al remover situar en oliks dicha posicion
+	 * @param key
+	 */
 	@Override
 	public void remove(K key) {
 		if(!contains(key)) return;
@@ -435,6 +439,7 @@ public class HashTableImpl<K, V> implements HashTable<K, V> {
 	private void recolocate() {
 		for (int i = 0; i < overflow.length; i++) {
 			if(isAvailable(overflow, i)){
+				olinks[i] = firstAvailable;
 				firstAvailable = i;
 				return;
 			}
